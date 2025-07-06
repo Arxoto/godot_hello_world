@@ -88,6 +88,10 @@ func want_look() -> bool:
 func want_move() -> bool:
 	return not is_zero_approx(want_move_direction)
 
+func make_want_jump() -> void:
+	want_jump_higher_flag = true
+	want_jump_once_flag = true
+
 func want_jump_once() -> bool:
 	return want_jump_once_flag
 

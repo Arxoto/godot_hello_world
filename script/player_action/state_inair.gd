@@ -7,7 +7,7 @@ var jump_higher_time := 0.0
 var coyote_time := 0.0
 @export var prejump_time_value := 0.1
 var prejump_time := 0.0
-@export var double_jump_value := 0
+@export var double_jump_value := 1
 var double_jump := 0
 
 func will_enter() -> bool:
@@ -27,7 +27,9 @@ func on_enter() -> void:
 func on_exit() -> void:
 	if can_prejump():
 		print("%s: prejump !!!" % Engine.get_physics_frames())
-		do_jump_first()
+		# do_jump_first()
+		# 修改意图 让下个状态进行跳跃
+		character.make_want_jump()
 
 #region jump
 
@@ -105,6 +107,17 @@ func can_prejump() -> bool:
 
 #endregion
 
+#region jump_on_wall
+
+## 优化攀爬时的体验
+## 扩展能力：伸出式平台（壁架）边缘呈倒阶梯状，操作得当时可以逆攀而上
+##     每个台阶2高度不依赖二段跳，1高度依赖二段跳（若蹬墙跳的判断仅仅为与墙碰撞，则极限操作也可以）
+
+func can_jump_on_wall() -> bool:
+	return character.is_on_wall()
+
+#endregion
+
 #region double_jump
 
 func start_double_jump() -> void:
@@ -127,11 +140,17 @@ func tick(delta: float) -> void:
 	add_jump_higher_time(delta)
 	add_coyote_time(delta)
 	add_prejump_time(delta)
+	if can_jump_on_wall():
+		start_coyote_time()
 
 	var jumped := false
 	if character.want_jump_once():
 		start_prejump_time()
-		if can_coyote_jump():
+		if can_jump_on_wall():
+			print("%s: jump on wall !!!" % Engine.get_physics_frames())
+			do_jump_first()
+			jumped = true
+		elif can_coyote_jump():
 			print("%s: coyote time !!!" % Engine.get_physics_frames())
 			do_jump_first()
 			jumped = true
