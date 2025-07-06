@@ -6,7 +6,7 @@ func will_enter() -> bool:
 
 func tick(delta: float) -> void:
 	if character.want_jump_once():
-		character.do_jump(character.jump_velocity_min())
+		character.do_jump_normal()
 	
 	if character.want_move():
 		character.do_move(delta, character.want_move_direction * character.run_speed(), character.run_acceleration())

@@ -27,7 +27,7 @@ func tick(delta: float) -> void:
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
 	
 	if character.want_jump_once():
-		character.do_jump(character.jump_velocity_min())
+		character.do_jump_normal()
 	else:
 		character.do_fall(delta, character.climb_velocity(), character.climb_gravity_scale())
 

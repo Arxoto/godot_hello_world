@@ -1,7 +1,7 @@
 class_name StateInAir
 extends StateCharacter
 
-@export var jump_higher_time_value := 0.1
+@export var jump_higher_time_value := 0.3
 var jump_higher_time := 0.0
 @export var coyote_time_value := 0.1
 var coyote_time := 0.0
@@ -27,11 +27,11 @@ func on_enter() -> void:
 func on_exit() -> void:
 	if can_prejump():
 		print("%s: prejump !!!" % Engine.get_physics_frames())
-		# do_jump_first()
-		# 修改意图 让下个状态进行跳跃
+		# do_jump_normal()
+		# 修改意图 让下个状态进行跳跃 有点魔法的感觉 可能会导致BUG
 		character.make_want_jump()
 
-#region jump
+#region jump_higher
 
 func jump_into_air() -> bool:
 	# 为什么这么实现详见 coyote_time
@@ -50,15 +50,26 @@ func add_jump_higher_time(delta: float) -> void:
 func can_jump_higher() -> bool:
 	return jump_higher_time < jump_higher_time_value
 
-func do_jump_first() -> void:
+func do_jump_normal() -> void:
 	start_jump_higher_time()
-	character.do_jump(character.jump_velocity_min())
+	character.do_jump_normal()
 
-func do_jump_higher() -> void:
-	var speed_min := character.jump_velocity_min()
-	var speed_max := character.jump_velocity_max()
-	var speed := lerpf(speed_min, speed_max, jump_higher_time / jump_higher_time_value)
-	character.do_jump(speed)
+func do_jump_higher_fall(delta: float) -> void:
+	var jump_gravity_scale := character.jump_gravity_scale()
+	var fall_gravity_scale := character.fall_gravity_scale()
+	var gravity_scale := lerpf(jump_gravity_scale, fall_gravity_scale, jump_higher_time / jump_higher_time_value)
+	character.do_fall(delta, character.fall_velocity(), gravity_scale)
+
+func do_fall(delta: float) -> void:
+	character.do_fall(delta, character.fall_velocity(), character.fall_gravity_scale())
+
+# func do_fly() -> void:
+# 	var fly_time := 0.5
+# 	var fly_time_value := 1.0
+# 	var speed_min := character.fly_velocity_min()
+# 	var speed_max := character.fly_velocity_max()
+# 	var speed := lerpf(speed_min, speed_max, fly_time / fly_time_value)
+# 	character.do_jump(speed)
 
 #endregion
 
@@ -143,31 +154,30 @@ func tick(delta: float) -> void:
 	if can_jump_on_wall():
 		start_coyote_time()
 
-	var jumped := false
 	if character.want_jump_once():
-		start_prejump_time()
 		if can_jump_on_wall():
 			print("%s: jump on wall !!!" % Engine.get_physics_frames())
-			do_jump_first()
-			jumped = true
+			do_jump_normal()
+			return
 		elif can_coyote_jump():
 			print("%s: coyote time !!!" % Engine.get_physics_frames())
-			do_jump_first()
-			jumped = true
+			do_jump_normal()
+			return
 		elif can_double_jump():
 			print("%s: double jump !!!" % Engine.get_physics_frames())
 			add_double_jump()
-			do_jump_first()
-			jumped = true
+			do_jump_normal()
+			return
+		else:
+			start_prejump_time()
 	elif character.want_jump_higher():
 		if can_jump_higher():
-			do_jump_higher()
-			jumped = true
+			do_jump_higher_fall(delta)
+			return
 	else:
 		final_jump_higher_time()
 	
-	if not jumped:
-		character.do_fall(delta, character.fall_velocity(), character.fall_gravity_scale())
+	do_fall(delta)
 
 func play() -> void:
 	character.play_turn()

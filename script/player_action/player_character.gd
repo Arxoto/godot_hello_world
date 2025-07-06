@@ -60,17 +60,23 @@ func air_resistance() -> float:
 func air_acceleration() -> float:
 	return movement_data.air_acceleration
 
-func jump_velocity_min() -> float:
-	return movement_data.jump_velocity_min
-
-func jump_velocity_max() -> float:
-	return movement_data.jump_velocity_max
+func jump_velocity() -> float:
+	return movement_data.jump_velocity
 
 func fall_velocity() -> float:
 	return movement_data.fall_velocity
 
 func fall_gravity_scale() -> float:
 	return movement_data.fall_gravity_scale
+
+func jump_gravity_scale() -> float:
+	return movement_data.jump_gravity_scale
+
+func fly_velocity_min() -> float:
+	return movement_data.fly_velocity_min
+
+func fly_velocity_max() -> float:
+	return movement_data.fly_velocity_max
 
 func climb_velocity() -> float:
 	return movement_data.climb_velocity
@@ -106,7 +112,16 @@ func do_move(delta: float, speed: float, a: float) -> void:
 	velocity.x = move_toward(velocity.x, speed, a * delta)
 
 func do_fall(delta: float, speed: float, g_scale: float) -> void:
-	velocity.y = move_toward(velocity.y, speed, base_gravity * g_scale * delta)
+	var force := 0.0
+	if velocity.y > 0:
+		force += velocity.y # fall faster
+
+	# print("%s : falling %s %s" % [Engine.get_physics_frames(), force * delta, base_gravity * g_scale * delta])
+	velocity.y = move_toward(velocity.y, speed, force * delta + base_gravity * g_scale * delta)
+
+func do_jump_normal() -> void:
+	# print("%s : do_jump" % Engine.get_physics_frames())
+	velocity.y = jump_velocity()
 
 func do_jump(speed: float) -> void:
 	velocity.y = speed
