@@ -1,0 +1,36 @@
+class_name StateClimbWall
+extends StateCharacter
+
+func will_enter() -> bool:
+	return can_climb()
+
+func upping() -> bool:
+	var v_y := character.velocity.y
+	return not is_zero_approx(v_y) and v_y < 0
+
+func can_climb() -> bool:
+	if upping():
+		return false
+	if not character.is_on_wall() or character.is_on_floor():
+		return false
+	
+	# can climb 墙面法线和移动方向必须相反，使用点积计算投影
+	var wall_normal := character.get_wall_normal()
+	var move_vector := Vector2(character.want_move_direction, 0)
+	var valid_dot := wall_normal.dot(move_vector)
+
+	return not is_zero_approx(valid_dot) && valid_dot < 0
+
+func tick(delta: float) -> void:
+	# 当没有横向速度时 左右墙的is_on_wall结果不一致 应该是BUG 给予一个速度强制碰撞
+	if character.want_move():
+		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
+	
+	if character.want_jump_once():
+		character.do_jump(character.jump_velocity_min())
+	else:
+		character.do_fall(delta, character.climb_velocity(), character.climb_gravity_scale())
+
+func play() -> void:
+	character.play_turn()
+	character.animation_player.play("jump")
