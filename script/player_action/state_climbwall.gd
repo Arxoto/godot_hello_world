@@ -14,6 +14,9 @@ func can_climb() -> bool:
 	if not character.is_on_wall() or character.is_on_floor():
 		return false
 	
+	if not character.hand_on_wall() or not character.foot_on_wall():
+		return false
+	
 	# can climb 墙面法线和移动方向必须相反，使用点积计算投影
 	var wall_normal := character.get_wall_normal()
 	var move_vector := Vector2(character.want_move_direction, 0)
@@ -33,4 +36,4 @@ func tick(delta: float) -> void:
 
 func play() -> void:
 	character.play_turn()
-	character.animation_player.play("jump")
+	character.animation_player.play("climb")

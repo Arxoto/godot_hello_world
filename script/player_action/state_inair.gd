@@ -125,7 +125,7 @@ func can_prejump() -> bool:
 ##     每个台阶2高度不依赖二段跳，1高度依赖二段跳（若蹬墙跳的判断仅仅为与墙碰撞，则极限操作也可以）
 
 func can_jump_on_wall() -> bool:
-	return character.is_on_wall()
+	return character.foot_on_wall()
 
 #endregion
 

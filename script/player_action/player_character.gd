@@ -4,9 +4,11 @@ extends CharacterBody2D
 ## 重力加速度
 var base_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 
-@onready var sprite_2d: Sprite2D = $Sprite2D
+@onready var body: Node2D = $TheBody
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var state_machine: StateMachine = $StateMachine
+@onready var hand_line: RayCast2D = $TheBody/HandLine
+@onready var foot_line: RayCast2D = $TheBody/FootLine
 
 @export var movement_data: PlayerMovementData
 
@@ -106,6 +108,16 @@ func want_jump_higher() -> bool:
 
 #endregion
 
+#region can
+
+func hand_on_wall() -> bool:
+	return hand_line.is_colliding()
+
+func foot_on_wall() -> bool:
+	return foot_line.is_colliding()
+
+#endregion
+
 #region do_effects
 
 func do_move(delta: float, speed: float, a: float) -> void:
@@ -132,6 +144,6 @@ func do_jump(speed: float) -> void:
 
 func play_turn() -> void:
 	if want_move():
-		sprite_2d.flip_h = want_move_direction < 0
+		body.scale.x = -1.0 if want_move_direction < 0 else 1.0
 
 #endregion
