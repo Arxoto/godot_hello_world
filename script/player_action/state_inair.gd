@@ -1,5 +1,5 @@
 class_name StateInAir
-extends StateCharacter
+extends StatePlayer
 
 @export var jump_higher_time_value := 0.3
 var jump_higher_time := 0.0

@@ -13,8 +13,9 @@ func use_default_state() -> void:
 	current_state = default_state
 	current_state.on_enter()
 
+## 使用时将状态机挂载到角色下 将状态挂载到状态机下
 func update_state() -> void:
-	# print(current_state.name)
+	# print(Engine.get_physics_frames(), " current_state ", current_state.name)
 	for state: StateBase in get_children():
 		if state.will_enter():
 			if state != current_state:

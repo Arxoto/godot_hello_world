@@ -1,5 +1,5 @@
 class_name StateOnFloor
-extends StateCharacter
+extends StatePlayer
 
 func will_enter() -> bool:
 	return character.is_on_floor()

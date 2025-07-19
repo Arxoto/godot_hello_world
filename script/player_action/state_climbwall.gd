@@ -1,5 +1,5 @@
 class_name StateClimbWall
-extends StateCharacter
+extends StatePlayer
 
 func will_enter() -> bool:
 	return can_climb()

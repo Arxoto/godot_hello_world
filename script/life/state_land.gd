@@ -1,7 +1,7 @@
-class_name StateCharacter
+class_name StateLand
 extends StateBase
 
-var character: PlayerCharacter
+var character: CharacterLand
 
 func _ready() -> void:
 	character = owner
