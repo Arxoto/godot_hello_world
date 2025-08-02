@@ -6,7 +6,7 @@ var base_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 
 @onready var body: Node2D = $TheBody
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var state_machine: StateMachine = $StateMachine
+@onready var state_machine: ConditionStateMachine = $ConditionStateMachine
 @onready var hand_line: RayCast2D = $TheBody/HandLine
 @onready var foot_line: RayCast2D = $TheBody/FootLine
 
@@ -37,8 +37,6 @@ func _physics_process(delta: float) -> void:
 	state_machine.update_state()
 	# tick
 	state_machine.tick(delta)
-	# play
-	state_machine.play()
 
 	move_and_slide()
 
@@ -71,8 +69,14 @@ func fall_velocity() -> float:
 func fall_gravity_scale() -> float:
 	return movement_data.fall_gravity_scale
 
-func jump_gravity_scale() -> float:
-	return movement_data.jump_gravity_scale
+func jump_higher_gravity_scale() -> float:
+	return movement_data.jump_higher_gravity_scale
+
+func jump_higher_time_value() -> float:
+	return movement_data.jump_higher_time_value
+
+func double_jump_value() -> int:
+	return movement_data.double_jump_value
 
 func fly_velocity_min() -> float:
 	return movement_data.fly_velocity_min

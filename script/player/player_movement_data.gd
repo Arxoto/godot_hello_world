@@ -16,13 +16,17 @@ extends Resource
 @export var air_acceleration := 2000.0
 
 ## 起跳速度
-@export var jump_velocity := -240.0
+@export var jump_velocity := -200.0
 ## 下落最大速度
-@export var fall_velocity := 800.0
+@export var fall_velocity := 500.0
 ## 正常的下落加速度
 @export var fall_gravity_scale := 1.0
-## 跳跃时的下落加速度
-@export var jump_gravity_scale := 0.1
+## 跳高时的下落加速度
+@export var jump_higher_gravity_scale := 0.1
+## 跳高的时长
+@export var jump_higher_time_value := 0.2
+## 二段跳次数
+@export var double_jump_value := 1
 
 ## 起飞的最小速度
 @export var fly_velocity_min := -100.0

@@ -1,5 +1,5 @@
 class_name StateLand
-extends StateBase
+extends ConditionStateBase
 
 var character: CharacterLand
 

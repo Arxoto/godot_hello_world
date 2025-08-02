@@ -1,12 +1,9 @@
-class_name LandTurn
+class_name LandAir
 extends StateLand
 
 func will_enter() -> bool:
-	return character.should_turn()
+	return not character.is_on_floor()
 
 func tick(delta: float) -> void:
 	character.do_stop(delta)
-	character.turn_around()
-
-func play():
-	pass
+	character.animation_player.play("walk")

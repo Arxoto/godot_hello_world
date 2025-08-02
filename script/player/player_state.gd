@@ -1,5 +1,5 @@
-class_name StatePlayer
-extends StateBase
+class_name PlayerState
+extends ConditionStateBase
 
 var character: PlayerCharacter
 

@@ -9,6 +9,4 @@ func will_enter() -> bool:
 
 func tick(delta: float) -> void:
 	character.do_run(delta)
-
-func play():
 	character.animation_player.play("run")

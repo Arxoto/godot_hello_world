@@ -1,19 +1,22 @@
 class_name StateInAir
-extends StatePlayer
+extends PlayerState
 
-@export var jump_higher_time_value := 0.3
-var jump_higher_time := 0.0
 @export var coyote_time_value := 0.1
 var coyote_time := 0.0
 @export var prejump_time_value := 0.1
 var prejump_time := 0.0
-@export var double_jump_value := 1
+
+var jump_higher_time_value: float
+var jump_higher_time := 0.0
+var double_jump_value: int
 var double_jump := 0
 
 func will_enter() -> bool:
 	return not character.is_on_floor()
 
 func on_enter() -> void:
+	jump_higher_time_value = character.jump_higher_time_value()
+	double_jump_value = character.double_jump_value()
 	if jump_into_air():
 		start_jump_higher_time()
 		final_coyote_time()
@@ -55,10 +58,10 @@ func do_jump_normal() -> void:
 	character.do_jump_normal()
 
 func do_jump_higher_fall(delta: float) -> void:
-	var jump_gravity_scale := character.jump_gravity_scale()
-	var fall_gravity_scale := character.fall_gravity_scale()
-	var gravity_scale := lerpf(jump_gravity_scale, fall_gravity_scale, jump_higher_time / jump_higher_time_value)
-	character.do_fall(delta, character.fall_velocity(), gravity_scale)
+	if jump_higher_time < jump_higher_time_value:
+		character.do_fall(delta, character.fall_velocity(), character.jump_higher_gravity_scale())
+	else:
+		character.do_fall(delta, character.fall_velocity(), character.fall_gravity_scale())
 
 func do_fall(delta: float) -> void:
 	character.do_fall(delta, character.fall_velocity(), character.fall_gravity_scale())
@@ -142,18 +145,7 @@ func add_double_jump() -> void:
 
 #endregion
 
-func tick(delta: float) -> void:
-	if character.want_move():
-		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
-	else:
-		character.do_move(delta, 0, character.air_resistance())
-	
-	add_jump_higher_time(delta)
-	add_coyote_time(delta)
-	add_prejump_time(delta)
-	if can_jump_on_wall():
-		start_coyote_time()
-
+func tick_jump(delta: float) -> void:
 	if character.want_jump_once():
 		if can_jump_on_wall():
 			print("%s: jump on wall !!!" % Engine.get_physics_frames())
@@ -179,6 +171,19 @@ func tick(delta: float) -> void:
 	
 	do_fall(delta)
 
-func play() -> void:
+func tick(delta: float) -> void:
+	if character.want_move():
+		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
+	else:
+		character.do_move(delta, 0, character.air_resistance())
+	
+	add_jump_higher_time(delta)
+	add_coyote_time(delta)
+	add_prejump_time(delta)
+	if can_jump_on_wall():
+		start_coyote_time()
+
+	tick_jump(delta)
+	
 	character.play_turn()
 	character.animation_player.play("jump")

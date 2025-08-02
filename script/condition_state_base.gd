@@ -1,4 +1,4 @@
-class_name StateBase
+class_name ConditionStateBase
 extends Node
 
 func will_enter() -> bool:
@@ -12,10 +12,5 @@ func on_enter() -> void:
 func on_exit() -> void:
 	pass
 
-## 状态的行为效果
 func tick(_delta: float) -> void:
 	push_error("tick for base state")
-
-## 状态的行为表现
-func play() -> void:
-	push_error("play for base state")

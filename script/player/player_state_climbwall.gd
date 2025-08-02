@@ -1,5 +1,5 @@
 class_name StateClimbWall
-extends StatePlayer
+extends PlayerState
 
 func will_enter() -> bool:
 	return can_climb()
@@ -33,7 +33,6 @@ func tick(delta: float) -> void:
 		character.do_jump_normal()
 	else:
 		character.do_fall(delta, character.climb_velocity(), character.climb_gravity_scale())
-
-func play() -> void:
+	
 	character.play_turn()
 	character.animation_player.play("climb")

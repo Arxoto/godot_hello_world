@@ -26,11 +26,7 @@ func tick(delta: float) -> void:
 
 	if idle:
 		character.do_stop(delta)
-	else:
-		character.do_walk(delta)
-
-func play():
-	if idle:
 		character.animation_player.play("idle")
 	else:
+		character.do_walk(delta)
 		character.animation_player.play("walk")
