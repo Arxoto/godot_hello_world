@@ -1,4 +1,4 @@
-class_name StateClimbWall
+class_name StateClimb
 extends PlayerState
 
 func will_enter() -> bool:
@@ -24,7 +24,7 @@ func can_climb() -> bool:
 
 	return not is_zero_approx(valid_dot) && valid_dot < 0
 
-func tick(delta: float) -> void:
+func tick_physics(delta: float) -> void:
 	# 当没有横向速度时 左右墙的is_on_wall结果不一致 应该是BUG 给予一个速度强制碰撞
 	if character.want_move():
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
@@ -35,4 +35,4 @@ func tick(delta: float) -> void:
 		character.do_fall(delta, character.climb_velocity(), character.climb_gravity_scale())
 	
 	character.play_turn()
-	character.animation_player.play("climb")
+	play_loop_anim(anim_climb)

@@ -7,6 +7,8 @@ func on_enter() -> void:
 func on_exit() -> void:
 	pass
 
-func tick(_delta: float) -> TransitionStateBase:
-	push_error("tick for base state")
+func tick_frame(_delta: float) -> void:
+	pass
+
+func tick_physics(_delta: float) -> TransitionStateBase:
 	return null

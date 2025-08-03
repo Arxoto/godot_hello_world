@@ -1,9 +1,16 @@
-class_name LandAir
+class_name StateLandAir
 extends StateLand
 
-func will_enter() -> bool:
-	return not character.is_on_floor()
+const STATE_NAME = "air"
 
-func tick(delta: float) -> void:
+func _ready():
+	super._ready()
+	register(STATE_NAME)
+
+func tick_physics(delta: float) -> TransitionStateBase:
+	if character.is_on_floor():
+		return state(StateLandIdle.STATE_NAME)
+	
 	character.do_stop(delta)
 	character.animation_player.play("walk")
+	return null

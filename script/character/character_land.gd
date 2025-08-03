@@ -11,7 +11,7 @@ var base_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 @onready var look_front: RayCast2D = $Graphics/LookFront
 @onready var look_down: RayCast2D = $Graphics/LookDown
 
-@onready var state_machine: ConditionStateMachine = $ConditionStateMachine
+@onready var state_machine: TransitionStateMachine = $TransitionStateMachine
 @onready var idle_timer: Timer = $IdleTimer
 @onready var walk_timer: Timer = $WalkTimer
 @onready var angry_timer: Timer = $AngryTimer
@@ -30,9 +30,11 @@ var run_direction := 1.0
 func _ready() -> void:
 	turn_around()
 
+func _process(delta):
+	state_machine.tick_frame(delta)
+
 func _physics_process(delta: float) -> void:
-	state_machine.update_state()
-	state_machine.tick(delta)
+	state_machine.tick_physics(delta)
 
 	do_fall(delta)
 	move_and_slide()

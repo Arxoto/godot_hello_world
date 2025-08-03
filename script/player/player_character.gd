@@ -21,8 +21,8 @@ var want_jump_once_flag := false
 ## 激活向上加速，释放减速
 var want_jump_higher_flag := false
 
-func _process(_delta: float) -> void:
-	want_look_angle = Input.get_axis("look_up", "look_down")
+# func _process(_delta: float) -> void:
+# 	want_look_angle = Input.get_axis("look_up", "look_down")
 
 func _physics_process(delta: float) -> void:
 	# want
@@ -33,10 +33,11 @@ func _physics_process(delta: float) -> void:
 		want_jump_once_flag = false
 		want_jump_higher_flag = false
 	# print(Engine.get_physics_frames(), ": want jump %s %s" % [want_jump_once_flag, want_jump_higher_flag])
+	
 	# update
 	state_machine.update_state()
 	# tick
-	state_machine.tick(delta)
+	state_machine.tick_physics(delta)
 
 	move_and_slide()
 
@@ -101,6 +102,10 @@ func want_move() -> bool:
 	return not is_zero_approx(want_move_direction)
 
 func make_want_jump() -> void:
+	# 修改意图 让下个状态进行跳跃 有点魔法的感觉 可能会导致BUG
+	# 状态退出后 上下文修改 应该要重新进行状态条件的判断 否则进入逻辑会与预期不一致
+	# 或者人为约定 状态的进入条件必须是客观条件 没有主观意愿（当前选择这个）
+	print("make_want_jump!!!")
 	want_jump_higher_flag = true
 	want_jump_once_flag = true
 

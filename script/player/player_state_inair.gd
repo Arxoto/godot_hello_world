@@ -15,6 +15,7 @@ func will_enter() -> bool:
 	return not character.is_on_floor()
 
 func on_enter() -> void:
+	super.on_enter()
 	jump_higher_time_value = character.jump_higher_time_value()
 	double_jump_value = character.double_jump_value()
 	if jump_into_air():
@@ -28,10 +29,11 @@ func on_enter() -> void:
 	start_double_jump()
 
 func on_exit() -> void:
+	super.on_exit()
 	if can_prejump():
 		print("%s: prejump !!!" % Engine.get_physics_frames())
 		# do_jump_normal()
-		# 修改意图 让下个状态进行跳跃 有点魔法的感觉 可能会导致BUG
+		# 修改意图 让下个状态进行跳跃 因为修改了上下文 所以进入状态不能以主观意愿来判断 只能以客观条件判断
 		character.make_want_jump()
 
 #region jump_higher
@@ -84,6 +86,7 @@ func do_fall(delta: float) -> void:
 # 分析：定义走出边缘：不是通过跳跃进入空中的
 # 实现：检测上一帧是否尝试跳跃，基本等价于检测这一帧有无向上速度
 # 例外：跳跃了但无速度：上一帧跳跃但是碰撞，本帧无碰撞仍然可跳
+# 例外：没跳跃但有速度：上一帧非主观原因导致升空，存在逻辑错误
 
 func start_coyote_time() -> void:
 	coyote_time = 0.0
@@ -171,7 +174,7 @@ func tick_jump(delta: float) -> void:
 	
 	do_fall(delta)
 
-func tick(delta: float) -> void:
+func tick_physics(delta: float) -> void:
 	if character.want_move():
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
 	else:
@@ -186,4 +189,9 @@ func tick(delta: float) -> void:
 	tick_jump(delta)
 	
 	character.play_turn()
-	character.animation_player.play("jump")
+	var v_y := character.velocity.y
+	# if -0.8 < v_y and v_y < 0.8: # jump_to_fall 动作有个莫名的甩刀不好看
+	if v_y < 0:
+		play_loop_anim(anim_jump)
+	else:
+		play_loop_anim(anim_fall)
