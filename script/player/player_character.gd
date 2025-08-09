@@ -5,7 +5,7 @@ extends CharacterBody2D
 var base_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 
 @onready var body: Node2D = $TheBody
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var anim_player: PlayerAnimPlayer = $PlayerAnimPlayer
 @onready var state_machine: ConditionStateMachine = $ConditionStateMachine
 @onready var hand_line: RayCast2D = $TheBody/HandLine
 @onready var foot_line: RayCast2D = $TheBody/FootLine
@@ -16,22 +16,54 @@ var base_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 var want_look_angle: float
 ## 仅有激活（摁住）和释放（不摁）状态，不涉及摁下和抬起
 var want_move_direction: float
-## 摁下直到抬起视为一次跳跃
+
+## 摁下触发 once 一段攻击的开始
+var want_attack_once_flag := false
+## 摁住激活 keep 一段攻击的蓄力
+var want_attack_keep_flag := false
+## 摁下触发 once 一段防御的开始
+var want_block_once_flag := false
+## 摁住激活 keep 一段防御的持续
+var want_block_keep_flag := false
+
+## 摁下触发 once 意为开始一段跳跃，摁下直到抬起视为一次跳跃
 var want_jump_once_flag := false
-## 激活向上加速，释放减速
+## 摁住激活 higher 意为跳得更高，摁下直到抬起视为一次跳跃
 var want_jump_higher_flag := false
 
-# func _process(_delta: float) -> void:
-# 	want_look_angle = Input.get_axis("look_up", "look_down")
+## 摁下触发 闪避/冲刺 （若不是因为涉及物理移动，更适合放在 _unhandled_input 中实现）
+var want_dodge_flag := false
+
+const INPUT_MOVE_LEFT := "move_left"
+const INPUT_MOVE_RIGHT := "move_right"
+const INPUT_LOOK_UP := "look_up"
+const INPUT_LOOK_DOWN := "look_down"
+const INPUT_JUMP := "jump"
+const INPUT_DODGE := "dodge"
+const INPUT_ATTACK := "attack"
+const INPUT_BLOCK := "block"
+
+func _process(delta: float) -> void:
+	want_look_angle = Input.get_axis(INPUT_LOOK_UP, INPUT_LOOK_DOWN)
+
+	want_attack_once_flag = Input.is_action_just_pressed(INPUT_ATTACK)
+	want_attack_keep_flag = Input.is_action_pressed(INPUT_ATTACK)
+
+	want_block_once_flag = Input.is_action_just_pressed(INPUT_BLOCK)
+	want_block_keep_flag = Input.is_action_pressed(INPUT_BLOCK)
+
+	state_machine.tick_frame(delta)
 
 func _physics_process(delta: float) -> void:
 	# want
-	want_move_direction = Input.get_axis("move_left", "move_right")
-	want_jump_once_flag = Input.is_action_just_pressed("jump")
-	want_jump_higher_flag = Input.is_action_pressed("jump")
-	if Input.is_action_just_released("jump"):
-		want_jump_once_flag = false
-		want_jump_higher_flag = false
+	want_move_direction = Input.get_axis(INPUT_MOVE_LEFT, INPUT_MOVE_RIGHT)
+	want_dodge_flag = Input.is_action_just_pressed(INPUT_DODGE)
+
+	want_jump_once_flag = Input.is_action_just_pressed(INPUT_JUMP)
+	want_jump_higher_flag = Input.is_action_pressed(INPUT_JUMP)
+	# if Input.is_action_just_released(INPUT_JUMP):
+	# 	want_jump_once_flag = false
+	# 	want_jump_higher_flag = false
 	# print(Engine.get_physics_frames(), ": want jump %s %s" % [want_jump_once_flag, want_jump_higher_flag])
 	
 	# update
@@ -115,6 +147,18 @@ func want_jump_once() -> bool:
 func want_jump_higher() -> bool:
 	return want_jump_higher_flag
 
+func want_dodge() -> bool:
+	return want_dodge_flag
+
+func want_attack_once() -> bool:
+	return want_attack_once_flag
+
+func want_attack_keep() -> bool:
+	return want_attack_keep_flag
+
+func want_block_keep() -> bool:
+	return want_block_keep_flag
+
 #endregion
 
 #region can
@@ -154,5 +198,11 @@ func do_jump(speed: float) -> void:
 func play_turn() -> void:
 	if want_move():
 		body.scale.x = -1.0 if want_move_direction < 0 else 1.0
+
+func play_once_anim(anim: String) -> void:
+	anim_player.play_once_anim(anim)
+
+func play_loop_anim(anim: String) -> void:
+	anim_player.play_loop_anim(anim)
 
 #endregion

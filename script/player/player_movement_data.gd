@@ -3,27 +3,27 @@ extends Resource
 
 ## 地面上的移动速度
 @export var run_speed := 200.0
-## 地面上的摩擦力
-@export var run_resistance := 800.0 # 0.25s 停止
-## 地面上的加速度
-@export var run_acceleration := 1600.0 # 0.25s 转身 视觉效果相对更明显
+## 地面上的摩擦力； 0.25s 停止，若为操作手感可缩短
+@export var run_resistance := 800.0
+## 地面上的加速度； 0.125s 达到最高速， 0.25s 转身（视觉效果相对更明显）
+@export var run_acceleration := 1600.0
 
 ## 空中的移动速度
 @export var air_speed := 200.0
-## 空中的摩擦力 一般认为速度保持得更久
-@export var air_resistance := 200.0
-## 空中的加速度 一般认为更灵活
+## 空中的摩擦力，一般认为速度保持得更久；若为操作手感可缩短，保证落点可控
+@export var air_resistance := 2000.0
+## 空中的加速度，一般认为更灵活； 0.1s 达到最高速， 0.2s 转身
 @export var air_acceleration := 2000.0
 
-## 起跳速度
+## 起跳速度；控制跳跃最低高度为一格
 @export var jump_velocity := -200.0
 ## 下落最大速度
 @export var fall_velocity := 500.0
 ## 正常的下落加速度
 @export var fall_gravity_scale := 1.0
-## 跳高时的下落加速度
-@export var jump_higher_gravity_scale := 0.1
-## 跳高的时长
+## 跳高时的下落加速度；负数会导致跳跃曲线异样；控制跳跃最高高度恰好为三格
+@export var jump_higher_gravity_scale := 0.2
+## 跳高的时长；过长会导致浮空感；控制跳跃最高高度恰好为三格
 @export var jump_higher_time_value := 0.2
 ## 二段跳次数
 @export var double_jump_value := 1

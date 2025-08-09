@@ -5,7 +5,7 @@ const STATE_NAME = "walk"
 
 func _ready():
 	super._ready()
-	register(STATE_NAME)
+	register(STATE_NAME, self)
 
 func on_enter() -> void:
 	character.walk_timer.start()

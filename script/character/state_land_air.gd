@@ -5,7 +5,10 @@ const STATE_NAME = "air"
 
 func _ready():
 	super._ready()
-	register(STATE_NAME)
+	register(STATE_NAME, self)
+
+func on_ready_enter() -> void:
+	return
 
 func tick_physics(delta: float) -> TransitionStateBase:
 	if character.is_on_floor():

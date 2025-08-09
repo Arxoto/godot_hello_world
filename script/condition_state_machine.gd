@@ -1,19 +1,12 @@
 class_name ConditionStateMachine
 extends Node
 
-@export var default_state: ConditionStateBase = ConditionStateBase.new()
+@export var state_list: Array[Node] = []
+var default_state: ConditionStateBase = ConditionStateBase.new() # 第一帧也可以不指定，下一帧在列表中选定，因此也无需实现 on_ready_enter
 var current_state: ConditionStateBase
-var state_list: Array[Node]
 
 func _ready() -> void:
-	use_default_state()
-	state_list = get_children()
-
-func use_default_state() -> void:
-	if current_state:
-		current_state.on_exit()
 	current_state = default_state
-	current_state.on_enter()
 
 ## 使用时将状态机挂载到角色下 将状态挂载到状态机下 由调用方决定在什么时候调用状态更新
 ## 该状态机一致性较强 状态之间的转换解耦合 但是状态之间的转换不灵活（动画过渡已有方案，但是涉及物理效果等不好实现）
@@ -28,7 +21,9 @@ func update_state() -> void:
 				current_state.on_enter()
 			return
 	
-	use_default_state()
+	current_state.on_exit()
+	current_state = default_state
+	current_state.on_enter()
 
 ## 仅按键响应，非物理
 func tick_input(event: InputEvent) -> void:

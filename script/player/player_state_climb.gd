@@ -30,9 +30,10 @@ func tick_physics(delta: float) -> void:
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
 	
 	if character.want_jump_once():
+		print("%s: jump on climb !!!" % Engine.get_physics_frames())
 		character.do_jump_normal()
 	else:
 		character.do_fall(delta, character.climb_velocity(), character.climb_gravity_scale())
 	
-	character.play_turn()
-	play_loop_anim(anim_climb)
+	play_turn()
+	play_loop_anim(character.anim_player.anim_climb)
