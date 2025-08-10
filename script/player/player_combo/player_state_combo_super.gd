@@ -1,15 +1,7 @@
 class_name StateComboSuper
 extends TransitionStateBase
 
-static var state_map: Dictionary[String, TransitionStateBase] = {}
-
-static func register(state_name: String, s: TransitionStateBase):
-	state_map[state_name] = s
-
-static func state(s: String) -> TransitionStateBase:
-	return state_map.get(s)
-
-@onready var outer_state: StateCombo = $"../"
+@onready var outer_state: StateCombo = $"../../"
 
 var character: PlayerCharacter
 

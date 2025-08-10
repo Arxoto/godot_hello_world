@@ -4,6 +4,18 @@ extends Node
 @export var default_state: TransitionStateBase = TransitionStateBase.new()
 var current_state: TransitionStateBase
 
+var state_map: Dictionary[String, TransitionStateBase] = {}
+
+#region state_map
+
+func register(state_name: String, s: TransitionStateBase):
+	state_map[state_name] = s
+
+func get_state(s: String) -> TransitionStateBase:
+	return state_map.get(s)
+
+#endregion
+
 func _ready() -> void:
 	current_state = default_state
 	current_state.on_ready_enter()

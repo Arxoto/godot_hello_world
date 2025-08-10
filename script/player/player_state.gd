@@ -3,22 +3,19 @@ extends ConditionStateBase
 
 var character: PlayerCharacter
 
-static var source: String
-static var targte: String
-
 func _ready() -> void:
 	character = owner
 
 func on_enter() -> void:
-	targte = name
+	super.on_enter()
 	transition()
 
 func on_exit() -> void:
-	source = name
+	super.on_exit()
 
 func transition() -> void:
-	# print("state transition ", source + "-" + targte)
-	match source + "-" + targte:
+	# print("state transition ", source + "-" + target)
+	match source + "-" + target:
 		"InAir-OnFloor":
 			play_once_anim(character.anim_player.anim_fall_to_floor)
 		"InAir-Climb":

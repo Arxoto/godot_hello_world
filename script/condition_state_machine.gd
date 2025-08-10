@@ -1,9 +1,13 @@
 class_name ConditionStateMachine
 extends Node
 
+@export var default_state: ConditionStateBase
 @export var state_list: Array[Node] = []
-var default_state: ConditionStateBase = ConditionStateBase.new() # 第一帧也可以不指定，下一帧在列表中选定，因此也无需实现 on_ready_enter
 var current_state: ConditionStateBase
+
+# 状态过渡动画的记录 不能用 static 因为多个玩家实例化后会出错
+var source: StringName
+var target: StringName
 
 func _ready() -> void:
 	current_state = default_state
