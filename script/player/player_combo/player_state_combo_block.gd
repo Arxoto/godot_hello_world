@@ -15,8 +15,10 @@ func on_enter() -> void:
 func tick_frame(delta: float) -> TransitionStateBase:
 	character.anim_player.play_loop_anim(character.anim_player.anim_block_1)
 
-	if character.want_attack_once():
-		print("asdasd  ", outer_state.can_block_attack)
+	if character.want_dodge() and outer_state.can_dodge:
+		character.echo_dodge()
+		return state(StateComboDodge.STATE_NAME)
+
 	if character.want_attack_once() and outer_state.can_block_attack:
 		return state(StateComboBlockAttack.STATE_NAME)
 	

@@ -1,0 +1,9 @@
+{
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false,
+    "editor.detectIndentation": false,
+	"editor.defaultFormatter": "geequlim.godot-tools",
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"editor.fontFamily": "'Sarasa Mono SC', 'UbuntuMono Nerd Font Propo', Consolas, 'Courier New', monospace",
+}

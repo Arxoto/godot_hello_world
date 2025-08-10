@@ -29,8 +29,11 @@ var want_jump_once_flag := false
 ## 摁住激活 higher 意为跳得更高，摁下直到抬起视为一次跳跃
 var want_jump_higher_flag := false
 
-## 摁下触发 闪避/冲刺 （若不是因为涉及物理移动，更适合放在 _unhandled_input 中实现）
-var want_dodge_flag := false
+# var want_dodge_flag := false
+# 闪避的容错时间 发现放在意图中更合适 后面可能会将跳跃一起迁过来 合并 coyote_timer prejump_timer
+## 摁下触发 闪避/冲刺
+var dodge_delay_timer := TinyTimer.new()
+@export var dodge_delay_value := 0.1
 
 const INPUT_MOVE_LEFT := "move_left"
 const INPUT_MOVE_RIGHT := "move_right"
@@ -41,6 +44,14 @@ const INPUT_DODGE := "dodge"
 const INPUT_ATTACK := "attack"
 const INPUT_BLOCK := "block"
 
+func _ready():
+	dodge_delay_timer.set_limit(dodge_delay_value)
+	dodge_delay_timer.final_time()
+
+func _unhandled_input(event: InputEvent):
+	if event.is_action_pressed(INPUT_DODGE):
+		dodge_delay_timer.start_time()
+
 func _process(delta: float) -> void:
 	want_look_angle = Input.get_axis(INPUT_LOOK_UP, INPUT_LOOK_DOWN)
 
@@ -49,12 +60,13 @@ func _process(delta: float) -> void:
 
 	want_block_keep_flag = Input.is_action_pressed(INPUT_BLOCK)
 
+	dodge_delay_timer.add_time(delta)
+
 	state_machine.tick_frame(delta)
 
 func _physics_process(delta: float) -> void:
 	# want
 	want_move_direction = Input.get_axis(INPUT_MOVE_LEFT, INPUT_MOVE_RIGHT)
-	want_dodge_flag = Input.is_action_just_pressed(INPUT_DODGE)
 
 	want_jump_once_flag = Input.is_action_just_pressed(INPUT_JUMP)
 	want_jump_higher_flag = Input.is_action_pressed(INPUT_JUMP)
@@ -89,6 +101,18 @@ func air_resistance() -> float:
 
 func air_acceleration() -> float:
 	return movement_data.air_acceleration
+
+func dodge_velocity() -> float:
+	return movement_data.dodge_velocity
+
+func dodge_acceleration() -> float:
+	return movement_data.dodge_acceleration
+
+func dodge_fast_velocity() -> float:
+	return movement_data.dodge_fast_velocity
+
+func dodge_fast_acceleration() -> float:
+	return movement_data.dodge_fast_acceleration
 
 func jump_velocity() -> float:
 	return movement_data.jump_velocity
@@ -145,7 +169,10 @@ func want_jump_higher() -> bool:
 	return want_jump_higher_flag
 
 func want_dodge() -> bool:
-	return want_dodge_flag
+	return dodge_delay_timer.in_time()
+
+func echo_dodge():
+	dodge_delay_timer.final_time()
 
 func want_attack_once() -> bool:
 	return want_attack_once_flag
@@ -169,6 +196,14 @@ func foot_on_wall() -> bool:
 #endregion
 
 #region do_effects
+
+func do_dodge(delta: float, fast: bool) -> void:
+	# 闪避时需要禁止翻转图像
+	if fast:
+		do_move(delta, body.scale.x * dodge_fast_velocity(), dodge_fast_acceleration())
+	else:
+		do_move(delta, body.scale.x * dodge_velocity(), dodge_acceleration())
+	# print("do_dodge ", velocity.x)
 
 func do_move(delta: float, speed: float, a: float) -> void:
 	velocity.x = move_toward(velocity.x, speed, a * delta)

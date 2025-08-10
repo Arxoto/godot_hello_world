@@ -24,6 +24,17 @@ signal dodge_perfect()
 ## 受击 struck
 signal hit()
 
+@export var hitboxs: Array[Hitbox] = []
+@export var hurtboxs: Array[Hurtbox] = []
 
-func _on_hitbox_hit(hurtbox: Variant) -> void:
-	pass # Replace with function body.
+func _ready():
+	for hitbox in hitboxs:
+		hitbox.hit.connect(self.on_hit)
+	for hurtbox in hurtboxs:
+		hurtbox.hurt.connect(self.on_hurt)
+
+func on_hit(hurtbox: Hurtbox):
+	print("[Hit]  from %s to %s" % [self.owner.name, hurtbox.owner.name])
+
+func on_hurt(hitbox: Hitbox):
+	print("[Hurt] into %s by %s" % [self.owner.name, hitbox.owner.name])

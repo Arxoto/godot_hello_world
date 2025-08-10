@@ -60,6 +60,7 @@ func on_exit() -> void:
 
 func jump_into_air() -> bool:
 	# 为什么这么实现详见 coyote_time
+	# 跳跃操作冗余迁移至意图后应该不用判断这个
 	var v_y := character.velocity.y
 	return not is_zero_approx(v_y) and v_y < 0
 
@@ -68,10 +69,8 @@ func do_jump_normal() -> void:
 	character.do_jump_normal()
 
 func do_jump_higher_fall(delta: float) -> void:
-	if jump_higher_timer.in_time():
-		character.do_fall(delta, character.fall_velocity(), character.jump_higher_gravity_scale())
-	else:
-		character.do_fall(delta, character.fall_velocity(), character.fall_gravity_scale())
+	# print("%s: jump_higher !!!" % Engine.get_physics_frames())
+	character.do_fall(delta, character.fall_velocity(), character.jump_higher_gravity_scale())
 
 func do_fall(delta: float) -> void:
 	character.do_fall(delta, character.fall_velocity(), character.fall_gravity_scale())
@@ -127,7 +126,7 @@ func tick_jump(delta: float) -> void:
 			return
 		else:
 			prejump_timer.start_time()
-	elif character.want_jump_higher() and inner_state_combo.can_jump:
+	elif character.want_jump_higher() and inner_state_combo.can_jump_higher:
 		if jump_higher_timer.in_time():
 			do_jump_higher_fall(delta)
 			return
@@ -136,12 +135,19 @@ func tick_jump(delta: float) -> void:
 	
 	do_fall(delta)
 
-func tick_physics(delta: float) -> void:
+func tick_move(delta: float):
+	if inner_state_combo.do_dodge:
+		character.do_dodge(delta, inner_state_combo.do_fast_dodge)
+		return
+	
 	if character.want_move() and inner_state_combo.can_move:
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
 	else:
 		character.do_move(delta, 0, character.air_resistance())
 	
+	play_turn()
+
+func tick_physics(delta: float) -> void:
 	jump_higher_timer.add_time(delta)
 	coyote_timer.add_time(delta)
 	prejump_timer.add_time(delta)
@@ -149,11 +155,13 @@ func tick_physics(delta: float) -> void:
 		coyote_timer.start_time()
 
 	tick_jump(delta)
+	tick_move(delta)
 	
-	play_turn()
-	var v_y := character.velocity.y
-	# if -0.8 < v_y and v_y < 0.8: # jump_to_fall 动作有个莫名的甩刀不好看
-	if v_y < 0:
+	# 不要过渡动画 jump_to_fall 动作有个莫名的甩刀不好看
+	if character.velocity.y < 0:
 		play_loop_anim(character.anim_player.anim_jump)
 	else:
 		play_loop_anim(character.anim_player.anim_fall)
+
+func tick_frame(delta: float) -> void:
+	inner_state_combo.tick_frame(delta)

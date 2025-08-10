@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://s0mol8xpob87"]
+[gd_scene load_steps=46 format=3 uid="uid://s0mol8xpob87"]
 
 [ext_resource type="Script" uid="uid://bgwonvxvahey8" path="res://script/player/player_character.gd" id="1_1jxqw"]
 [ext_resource type="Texture2D" uid="uid://curyyv80gd6qf" path="res://texture/char_blue_1.png" id="1_4flbx"]
@@ -12,7 +12,6 @@
 [ext_resource type="Script" uid="uid://c33vv0jgv2t1u" path="res://script/player/player_state_inair.gd" id="6_b26j0"]
 [ext_resource type="Script" uid="uid://d0t2p3lh5f42o" path="res://script/player/player_state_climb.gd" id="7_1jxqw"]
 [ext_resource type="Script" uid="uid://dy10niooaau3p" path="res://script/player/player_combo/player_state_combo.gd" id="9_b26j0"]
-[ext_resource type="Script" uid="uid://ctwel72o2ks2e" path="res://script/player/player_state.gd" id="9_pbfsw"]
 [ext_resource type="Script" uid="uid://dcopww4hqbtc5" path="res://script/transition_state_machine.gd" id="10_n7ghd"]
 [ext_resource type="Script" uid="uid://cgw2arfuuocqd" path="res://script/player/player_combo/player_state_combo_idle.gd" id="12_op7ga"]
 [ext_resource type="Script" uid="uid://bagayy0r24agm" path="res://script/player/player_combo/player_state_combo_block.gd" id="13_q13i1"]
@@ -20,6 +19,8 @@
 [ext_resource type="Script" uid="uid://bxss5pdxb02ug" path="res://script/player/player_combo/player_state_combo_attack_light.gd" id="15_pbfsw"]
 [ext_resource type="Script" uid="uid://crm6piwgbq2e6" path="res://script/player/player_combo/player_state_combo_attack_twice.gd" id="16_5tmop"]
 [ext_resource type="Script" uid="uid://bgmpddrbrnpld" path="res://script/player/player_combo/player_state_combo_attack_heavy.gd" id="17_7ahtn"]
+[ext_resource type="Script" uid="uid://dwt4hssxu4uw" path="res://script/combat/combat_unit.gd" id="21_5tmop"]
+[ext_resource type="Script" uid="uid://hlfo6g4oy6tp" path="res://script/player/player_combo/player_state_combo_dodge.gd" id="21_7ahtn"]
 
 [sub_resource type="Resource" id="Resource_dw050"]
 script = ExtResource("2_dw050")
@@ -29,6 +30,10 @@ run_acceleration = 2000.0
 air_speed = 200.0
 air_resistance = 1600.0
 air_acceleration = 1600.0
+dodge_velocity = 200.0
+dodge_acceleration = 3000.0
+dodge_fast_velocity = 300.0
+dodge_fast_acceleration = 6000.0
 jump_velocity = -200.0
 fall_velocity = 500.0
 fall_gravity_scale = 1.0
@@ -157,7 +162,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("ConditionStateMachine/StateCombo:can_dodge")
+tracks/8/path = NodePath("ConditionStateMachine/StateCombo:can_jump_higher")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -169,7 +174,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ConditionStateMachine/StateCombo:can_block")
+tracks/9/path = NodePath("ConditionStateMachine/StateCombo:can_dodge")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -181,7 +186,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("ConditionStateMachine/StateCombo:can_attack")
+tracks/10/path = NodePath("ConditionStateMachine/StateCombo:can_block")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -193,19 +198,19 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("ConditionStateMachine/StateCombo:can_block_attack")
+tracks/11/path = NodePath("ConditionStateMachine/StateCombo:can_attack")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("ConditionStateMachine/StateCombo:can_attack_twice")
+tracks/12/path = NodePath("ConditionStateMachine/StateCombo:can_block_attack")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -217,7 +222,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("ConditionStateMachine/StateCombo:can_heavy_attack")
+tracks/13/path = NodePath("ConditionStateMachine/StateCombo:can_attack_twice")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -229,7 +234,7 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("ConditionStateMachine/StateCombo:perfect_dodge_flag")
+tracks/14/path = NodePath("ConditionStateMachine/StateCombo:can_heavy_attack")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -241,7 +246,7 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("ConditionStateMachine/StateCombo:perfect_block_flag")
+tracks/15/path = NodePath("ConditionStateMachine/StateCombo:do_dodge")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -253,7 +258,7 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("ConditionStateMachine/StateCombo:block_attack_flag")
+tracks/16/path = NodePath("ConditionStateMachine/StateCombo:do_fast_dodge")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -265,34 +270,70 @@ tracks/16/keys = {
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("TheBody/Hitbox/HitAttack1:disabled")
+tracks/17/path = NodePath("ConditionStateMachine/StateCombo:perfect_dodge_flag")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("TheBody/Hitbox/HitAttack2:disabled")
+tracks/18/path = NodePath("ConditionStateMachine/StateCombo:perfect_block_flag")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/19/type = "value"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("TheBody/Hitbox/HitAttack3:disabled")
+tracks/19/path = NodePath("ConditionStateMachine/StateCombo:block_attack_flag")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("TheBody/Hitbox/HitAttack1:disabled")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("TheBody/Hitbox/HitAttack2:disabled")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("TheBody/Hitbox/HitAttack3:disabled")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -459,7 +500,7 @@ tracks/6/path = NodePath("ConditionStateMachine/StateCombo:can_dodge")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0.1, 0.4),
+"times": PackedFloat32Array(0.2, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -471,7 +512,7 @@ tracks/7/path = NodePath("ConditionStateMachine/StateCombo:can_block")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0.1, 0.4),
+"times": PackedFloat32Array(0.2, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -753,8 +794,8 @@ tracks/9/keys = {
 
 [sub_resource type="Animation" id="Animation_dw050"]
 resource_name = "block_0"
-length = 0.1
-step = 0.1
+length = 0.3
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -777,7 +818,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(0, 560, 56, 56)]
+"values": [Rect2(0, 560, 168, 56)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -789,7 +830,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": [3]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -810,10 +851,10 @@ tracks/4/path = NodePath("TheBody/Sprite2D:frame")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [0]
+"values": [0, 1, 2]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -822,7 +863,7 @@ tracks/5/path = NodePath("ConditionStateMachine/StateCombo:perfect_block_flag")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.1),
+"times": PackedFloat32Array(0.05, 0.25),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -834,10 +875,10 @@ tracks/6/path = NodePath("ConditionStateMachine/StateCombo:can_block_attack")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.1),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_q13i1"]
@@ -1143,6 +1184,18 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [0, 1]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ConditionStateMachine/StateCombo:can_dodge")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_b26j0"]
@@ -1748,6 +1801,155 @@ tracks/5/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
+[sub_resource type="Animation" id="Animation_5tmop"]
+resource_name = "dodge"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TheBody/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_b26j0")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TheBody/Sprite2D:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 112, 448, 56)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TheBody/Sprite2D:hframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TheBody/Sprite2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -28)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TheBody/Sprite2D:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ConditionStateMachine/StateCombo:can_move")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.35),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ConditionStateMachine/StateCombo:can_jump")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("ConditionStateMachine/StateCombo:can_block")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("ConditionStateMachine/StateCombo:can_attack")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("ConditionStateMachine/StateCombo:perfect_dodge_flag")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("ConditionStateMachine/StateCombo:do_dodge")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.35),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("ConditionStateMachine/StateCombo:do_fast_dodge")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1jxqw"]
 _data = {
 &"RESET": SubResource("Animation_hqtel"),
@@ -1759,6 +1961,7 @@ _data = {
 &"block_1": SubResource("Animation_q13i1"),
 &"block_attack": SubResource("Animation_pylmc"),
 &"climb": SubResource("Animation_n7ghd"),
+&"dodge": SubResource("Animation_5tmop"),
 &"fall": SubResource("Animation_b26j0"),
 &"fall_to_floor": SubResource("Animation_urp6f"),
 &"floor_to_jump": SubResource("Animation_ivps1"),
@@ -1796,6 +1999,7 @@ target_position = Vector2(8, 0)
 collision_mask = 7
 
 [node name="Hitbox" type="Area2D" parent="TheBody"]
+visible = false
 script = ExtResource("4_pylmc")
 metadata/_custom_type_script = "uid://q4rup5eu1rgw"
 metadata/_edit_group_ = true
@@ -1817,6 +2021,7 @@ shape = SubResource("RectangleShape2D_7lmhl")
 disabled = true
 
 [node name="Hurtbox" type="Area2D" parent="TheBody"]
+visible = false
 script = ExtResource("5_pbfsw")
 metadata/_custom_type_script = "uid://ybcsqcodncq"
 metadata/_edit_group_ = true
@@ -1839,13 +2044,9 @@ metadata/_custom_type_script = "uid://b87hu4yaaey76"
 
 [node name="ConditionStateMachine" type="Node" parent="." node_paths=PackedStringArray("default_state", "state_list")]
 script = ExtResource("3_2hs0m")
-default_state = NodePath("PlayerState")
+default_state = NodePath("InAir")
 state_list = [NodePath("Climb"), NodePath("OnFloor"), NodePath("InAir")]
 metadata/_custom_type_script = "uid://bcffdiga6gkru"
-
-[node name="PlayerState" type="Node" parent="ConditionStateMachine"]
-script = ExtResource("9_pbfsw")
-metadata/_custom_type_script = "uid://ctwel72o2ks2e"
 
 [node name="Climb" type="Node" parent="ConditionStateMachine" node_paths=PackedStringArray("inner_state_combo")]
 script = ExtResource("7_1jxqw")
@@ -1894,3 +2095,13 @@ metadata/_custom_type_script = "uid://crm6piwgbq2e6"
 [node name="StateComboAttackHeavy" type="Node" parent="ConditionStateMachine/StateCombo/TransitionStateMachine"]
 script = ExtResource("17_7ahtn")
 metadata/_custom_type_script = "uid://bgmpddrbrnpld"
+
+[node name="StateComboDodge" type="Node" parent="ConditionStateMachine/StateCombo/TransitionStateMachine"]
+script = ExtResource("21_7ahtn")
+metadata/_custom_type_script = "uid://hlfo6g4oy6tp"
+
+[node name="CombatUnit" type="Node" parent="." node_paths=PackedStringArray("hitboxs", "hurtboxs")]
+script = ExtResource("21_5tmop")
+hitboxs = [NodePath("../TheBody/Hitbox")]
+hurtboxs = [NodePath("../TheBody/Hurtbox")]
+metadata/_custom_type_script = "uid://dwt4hssxu4uw"

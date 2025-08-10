@@ -15,6 +15,5 @@ func _init():
 func on_area_entered(hurtbox: Hurtbox):
 	if self.owner == hurtbox.owner:
 		return
-	print("[Hit] from %s to %s" % [self.owner.name, hurtbox.owner.name])
 	hit.emit(hurtbox)
 	hurtbox.hurt.emit(self)

@@ -20,9 +20,10 @@ const anim_attack_3 := "attack_3"
 const anim_block_0 := "block_0"
 const anim_block_1 := "block_1"
 const anim_block_attack := "block_attack"
+const anim_dodge := "dodge"
 
 # const loop_anims: Array[String] = [anim_run, anim_idle, anim_climb, anim_jump, anim_fall, anim_block_1] # 目的是让循环动画的优先级最低 用下面的优先级等级代替
-const combo_anims: Array[String] = [anim_attack_1, anim_attack_2, anim_attack_3, anim_block_0, anim_block_1, anim_block_attack] # 用 Dictionary 实现 "HashSet" 可能更好
+const combo_anims: Dictionary[String, bool] = {anim_attack_1: true, anim_attack_2: true, anim_attack_3: true, anim_block_0: true, anim_block_1: true, anim_block_attack: true, anim_dodge: true}
 const anim_priority: Dictionary[String, int] = {
 	"": - 1,
 	anim_run: 0,
@@ -39,6 +40,7 @@ const anim_priority: Dictionary[String, int] = {
 	anim_block_0: 99,
 	anim_block_1: 1,
 	anim_block_attack: 99,
+	anim_dodge: 99,
 }
 
 var current_anim: String

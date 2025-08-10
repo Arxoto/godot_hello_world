@@ -2,15 +2,6 @@
 .godot/
 /android/
 
-*.*
-!.gitattributes
-!.gitignore
-!.editorconfig
-
-!project.godot
-!icon.svg
-!*.gd
-!*.gd.uid
-!*.tscn
-!*.png
-!*.import
+*.tmp
+*.kra
+*.aseprite
