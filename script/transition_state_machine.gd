@@ -23,7 +23,7 @@ func _ready() -> void:
 func tick_frame(delta: float) -> void:
 	var state: TransitionStateBase = current_state.tick_frame(delta)
 	if state:
-		print("%s/%s, when tick_frame, %s: %s -> %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), get_parent().name, current_state.name, state.name])
+		# print("%s/%s, when tick_frame, %s: %s -> %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), get_parent().name, current_state.name, state.name])
 		change_state(state)
 
 ## 该状态机适合实现分层状态机 但需要注意状态不能返回自身或子类
@@ -32,7 +32,7 @@ func tick_frame(delta: float) -> void:
 func tick_physics(delta: float) -> void:
 	var state: TransitionStateBase = current_state.tick_physics(delta)
 	if state:
-		print("%s/%s, when tick_physics, %s: %s -> %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), get_parent().name, current_state.name, state.name])
+		# print("%s/%s, when tick_physics, %s: %s -> %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), get_parent().name, current_state.name, state.name])
 		change_state(state)
 
 func change_state(state: TransitionStateBase):

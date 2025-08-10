@@ -23,3 +23,7 @@ signal dodge_perfect()
 
 ## 受击 struck
 signal hit()
+
+
+func _on_hitbox_hit(hurtbox: Variant) -> void:
+	pass # Replace with function body.

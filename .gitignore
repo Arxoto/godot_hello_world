@@ -3,7 +3,14 @@
 /android/
 
 *.*
-!*.gd
-!.editorconfig
 !.gitattributes
 !.gitignore
+!.editorconfig
+
+!project.godot
+!icon.svg
+!*.gd
+!*.gd.uid
+!*.tscn
+!*.png
+!*.import

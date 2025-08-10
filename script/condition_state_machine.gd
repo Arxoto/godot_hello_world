@@ -19,7 +19,7 @@ func update_state() -> void:
 	for state: ConditionStateBase in state_list:
 		if state.will_enter():
 			if state != current_state:
-				print("%s/%s, %s: %s -> %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), get_parent().name, current_state.name, state.name])
+				# print("%s/%s, %s: %s -> %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), get_parent().name, current_state.name, state.name])
 				current_state.on_exit()
 				current_state = state
 				current_state.on_enter()

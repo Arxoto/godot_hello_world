@@ -3,17 +3,17 @@ extends Resource
 
 ## 地面上的移动速度
 @export var run_speed := 200.0
-## 地面上的摩擦力； 0.25s 停止，若为操作手感可缩短
-@export var run_resistance := 800.0
-## 地面上的加速度； 0.125s 达到最高速， 0.25s 转身（视觉效果相对更明显）
-@export var run_acceleration := 1600.0
+## 地面上的摩擦力，若为操作手感可缩短； 0.05s 停止
+@export var run_resistance := 4000.0
+## 地面上的加速度； 0.1s 达到最高速， 0.2s 转身
+@export var run_acceleration := 2000.0
 
 ## 空中的移动速度
 @export var air_speed := 200.0
-## 空中的摩擦力，一般认为速度保持得更久；若为操作手感可缩短，保证落点可控
-@export var air_resistance := 2000.0
-## 空中的加速度，一般认为更灵活； 0.1s 达到最高速， 0.2s 转身
-@export var air_acceleration := 2000.0
+## 空中的摩擦力较小，可适当缩短若提升操作手感，保证落点可控； 0.125s 停止
+@export var air_resistance := 1600.0
+## 空中更不灵活； 0.125s 达到最高速， 0.25s 转身
+@export var air_acceleration := 1600.0
 
 ## 起跳速度；控制跳跃最低高度为一格
 @export var jump_velocity := -200.0
