@@ -3,8 +3,9 @@ extends StateComboSuper
 
 const STATE_NAME = "attack_heavy"
 
-func get_state_name() -> String:
-	return STATE_NAME
+func _ready() -> void:
+	super._ready()
+	register(STATE_NAME, self)
 
 func on_enter() -> void:
 	super.on_enter()

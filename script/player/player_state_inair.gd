@@ -1,6 +1,8 @@
 class_name StateInAir
 extends PlayerState
 
+@export var inner_state_combo: StateCombo
+
 # 问题：边缘无法跳跃
 # 分析：边缘之外才尝试跳跃，此时因为在空中无法进行跳跃
 # 预期：刚走出边缘的一段时间内允许跳跃
@@ -109,7 +111,7 @@ func add_double_jump() -> void:
 #endregion
 
 func tick_jump(delta: float) -> void:
-	if character.want_jump_once():
+	if character.want_jump_once() and inner_state_combo.can_jump:
 		if can_jump_on_wall():
 			print("%s: jump on wall !!!" % Engine.get_physics_frames())
 			do_jump_normal()
@@ -125,7 +127,7 @@ func tick_jump(delta: float) -> void:
 			return
 		else:
 			prejump_timer.start_time()
-	elif character.want_jump_higher():
+	elif character.want_jump_higher() and inner_state_combo.can_jump:
 		if jump_higher_timer.in_time():
 			do_jump_higher_fall(delta)
 			return
@@ -135,7 +137,7 @@ func tick_jump(delta: float) -> void:
 	do_fall(delta)
 
 func tick_physics(delta: float) -> void:
-	if character.want_move():
+	if character.want_move() and inner_state_combo.can_move:
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
 	else:
 		character.do_move(delta, 0, character.air_resistance())

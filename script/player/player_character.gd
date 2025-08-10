@@ -21,9 +21,7 @@ var want_move_direction: float
 var want_attack_once_flag := false
 ## 摁住激活 keep 一段攻击的蓄力
 var want_attack_keep_flag := false
-## 摁下触发 once 一段防御的开始
-var want_block_once_flag := false
-## 摁住激活 keep 一段防御的持续
+## 摁住激活 防御姿态
 var want_block_keep_flag := false
 
 ## 摁下触发 once 意为开始一段跳跃，摁下直到抬起视为一次跳跃
@@ -49,7 +47,6 @@ func _process(delta: float) -> void:
 	want_attack_once_flag = Input.is_action_just_pressed(INPUT_ATTACK)
 	want_attack_keep_flag = Input.is_action_pressed(INPUT_ATTACK)
 
-	want_block_once_flag = Input.is_action_just_pressed(INPUT_BLOCK)
 	want_block_keep_flag = Input.is_action_pressed(INPUT_BLOCK)
 
 	state_machine.tick_frame(delta)

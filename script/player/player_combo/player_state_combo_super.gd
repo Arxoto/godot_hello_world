@@ -9,14 +9,12 @@ static func register(state_name: String, s: TransitionStateBase):
 static func state(s: String) -> TransitionStateBase:
 	return state_map.get(s)
 
+@onready var outer_state: StateCombo = $"../"
+
 var character: PlayerCharacter
 
 func _ready() -> void:
 	character = owner
-	register(get_state_name(), self)
-
-func get_state_name() -> String:
-	return ""
 
 func tick_frame(_delta: float) -> TransitionStateBase:
 	if character.anim_player.not_combo():

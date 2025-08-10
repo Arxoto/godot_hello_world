@@ -1,6 +1,8 @@
 class_name StateClimb
 extends PlayerState
 
+@export var inner_state_combo: StateCombo
+
 func will_enter() -> bool:
 	return can_climb()
 
@@ -26,10 +28,10 @@ func can_climb() -> bool:
 
 func tick_physics(delta: float) -> void:
 	# 当没有横向速度时 左右墙的is_on_wall结果不一致 应该是BUG 给予一个速度强制碰撞
-	if character.want_move():
+	if character.want_move() and inner_state_combo.can_move:
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
 	
-	if character.want_jump_once():
+	if character.want_jump_once() and inner_state_combo.can_jump:
 		print("%s: jump on climb !!!" % Engine.get_physics_frames())
 		character.do_jump_normal()
 	else:
