@@ -48,6 +48,7 @@ func _ready():
 	jump_delay_timer.set_limit(jump_delay_value)
 
 # 同一渲染帧中 执行顺序 _unhandled_input -> _physics_process -> _process
+# 因此第一帧就会略有偏差
 func _unhandled_input(event: InputEvent):
 	# print("%s/%s, %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), "_unhandled_input"])
 	if event.is_action_pressed(INPUT_DODGE):
@@ -56,7 +57,6 @@ func _unhandled_input(event: InputEvent):
 		jump_delay_timer.start_time()
 		jump_flag = true
 	elif event.is_action_released(INPUT_JUMP):
-		jump_delay_timer.final_time()
 		jump_flag = false
 
 func _physics_process(delta: float) -> void:
@@ -169,6 +169,7 @@ func want_jump_higher() -> bool:
 	return jump_flag
 
 func echo_jump():
+	if jump_delay_timer.time > 0.02: print("pre jump time: ", jump_delay_timer.time)
 	jump_delay_timer.final_time()
 
 func want_attack_once() -> bool:
@@ -194,8 +195,8 @@ func foot_on_wall() -> bool:
 
 #region do_effects
 
+## 使用注意 闪避时禁止翻转图像
 func do_dodge(delta: float, fast: bool) -> void:
-	# 闪避时需要禁止翻转图像
 	if fast:
 		do_move(delta, body.scale.x * dodge_fast_velocity(), dodge_fast_acceleration())
 	else:

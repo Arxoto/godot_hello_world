@@ -1,7 +1,7 @@
 class_name Hurtbox
 extends Area2D
 
-var combat_unit: CombatUnit
+var combat_unit: CombatEntity
 
 func _init():
 	monitoring = false

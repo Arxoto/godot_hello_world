@@ -19,9 +19,9 @@ extends Resource
 @export var dodge_velocity := 200.0
 ## 闪避/冲刺/翻滚加速度
 @export var dodge_acceleration := 3000.0
-## 闪避/冲刺/翻滚高速度
+## 闪避/冲刺/翻滚速度（分段速度）
 @export var dodge_fast_velocity := 300.0
-## 闪避/冲刺/翻滚度加速度
+## 闪避/冲刺/翻滚加速度（分段速度）
 @export var dodge_fast_acceleration := 6000.0
 
 ## 起跳速度；控制跳跃最低高度为一格

@@ -702,11 +702,16 @@ tile_set = SubResource("TileSet_gv5m4")
 tile_map_data = PackedByteArray("AAAUAAIAAAAJAAMAAAAhAAwAAAAIAAIAAAAgAAAAAAAIAAMAAAAhAAAAAAAHAAMAAAApAAAAAAAKAAIAAAArAAoAAAAIAAIAAAAsAAoAAAAKAAIAAAAtAAoAAAAHAAMAAABAAAoAAAAJAAIAAABBAAoAAAAJAAMAAABEAAoAAAAIAAMAAAA4AAgAAAAGAAMAAAD///L/AAAJAAMAAAACAPL/AAAIAAMAAAAEAPL/AAAKAAIAAAANAPL/AAAGAAMAAAAUAPL/AAAIAAIAAAAVAPL/AAAJAAMAAAAcAPL/AAAJAAMAAAAsAPb/AAAJAAIAAAAtAPb/AAAJAAMAAAA=")
 tile_set = SubResource("TileSet_aqk2v")
 
-[node name="Boar" parent="." instance=ExtResource("7_pkg7o")]
+[node name="BoarA" parent="." instance=ExtResource("7_pkg7o")]
 position = Vector2(765, 108)
 
 [node name="BoarB" parent="." instance=ExtResource("7_pkg7o")]
 position = Vector2(472, 193)
+walk_speed = 0.0
+run_speed = 0.0
+
+[node name="BoarC" parent="." instance=ExtResource("7_pkg7o")]
+position = Vector2(524, 192)
 walk_speed = 0.0
 run_speed = 0.0
 

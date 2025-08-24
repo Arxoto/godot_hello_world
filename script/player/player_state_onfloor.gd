@@ -35,6 +35,7 @@ func tick_jump(delta: float):
 		if stand_to_jump_delay_timer.is_forced_final():
 			play_once_anim(character.anim_player.anim_floor_to_jump)
 			stand_to_jump_delay_timer.start_time()
+			character.echo_jump() # 提前通知跳跃动作
 
 	stand_to_jump_delay_timer.add_time(delta)
 	if stand_to_jump_delay_timer.end():
@@ -47,6 +48,7 @@ func tick_jump(delta: float):
 	# 站立时跳跃 结束计时 不会重复生效
 
 func tick_move(delta: float):
+	# todo 攻击可以向前移动（根据攻击时的速度判断） 但无法转身
 	if inner_state_combo.do_dodge:
 		character.do_dodge(delta, inner_state_combo.do_fast_dodge)
 		return

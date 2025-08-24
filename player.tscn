@@ -19,7 +19,7 @@
 [ext_resource type="Script" uid="uid://bxss5pdxb02ug" path="res://script/player/player_combo/player_state_combo_attack_light.gd" id="15_pbfsw"]
 [ext_resource type="Script" uid="uid://crm6piwgbq2e6" path="res://script/player/player_combo/player_state_combo_attack_twice.gd" id="16_5tmop"]
 [ext_resource type="Script" uid="uid://bgmpddrbrnpld" path="res://script/player/player_combo/player_state_combo_attack_heavy.gd" id="17_7ahtn"]
-[ext_resource type="Script" uid="uid://dwt4hssxu4uw" path="res://script/combat/combat_unit.gd" id="21_5tmop"]
+[ext_resource type="Script" uid="uid://dwt4hssxu4uw" path="res://script/combat/combat_entity.gd" id="21_5tmop"]
 [ext_resource type="Script" uid="uid://hlfo6g4oy6tp" path="res://script/player/player_combo/player_state_combo_dodge.gd" id="21_7ahtn"]
 
 [sub_resource type="Resource" id="Resource_dw050"]
@@ -2100,8 +2100,7 @@ metadata/_custom_type_script = "uid://bgmpddrbrnpld"
 script = ExtResource("21_7ahtn")
 metadata/_custom_type_script = "uid://hlfo6g4oy6tp"
 
-[node name="CombatUnit" type="Node" parent="." node_paths=PackedStringArray("hitboxs", "hurtboxs")]
+[node name="CombatUnit" type="Node" parent="." node_paths=PackedStringArray("graphics")]
 script = ExtResource("21_5tmop")
-hitboxs = [NodePath("../TheBody/Hitbox")]
-hurtboxs = [NodePath("../TheBody/Hurtbox")]
+graphics = NodePath("../TheBody")
 metadata/_custom_type_script = "uid://dwt4hssxu4uw"
