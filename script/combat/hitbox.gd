@@ -1,7 +1,9 @@
 class_name Hitbox
 extends Area2D
 
-signal hit(hurtbox)
+signal hit(hitbox, hurtbox)
+
+var combat_unit: CombatUnit
 
 func _init():
 	monitoring = true
@@ -12,8 +14,7 @@ func _init():
 
 	area_entered.connect(on_area_entered)
 
-func on_area_entered(hurtbox: Hurtbox):
+func on_area_entered(hurtbox: Area2D):
 	if self.owner == hurtbox.owner:
 		return
-	hit.emit(hurtbox)
-	hurtbox.hurt.emit(self)
+	hit.emit(self, hurtbox)

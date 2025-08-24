@@ -32,7 +32,7 @@ func tick_jump(delta: float):
 	# 站立时延迟跳跃 动作连贯
 	if not character.want_move() and character.want_jump_once():
 		# 仅第一次触发计时
-		if stand_to_jump_delay_timer.forced_final():
+		if stand_to_jump_delay_timer.is_forced_final():
 			play_once_anim(character.anim_player.anim_floor_to_jump)
 			stand_to_jump_delay_timer.start_time()
 

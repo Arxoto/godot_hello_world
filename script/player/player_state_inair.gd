@@ -8,34 +8,27 @@ extends PlayerState
 # 预期：刚走出边缘的一段时间内允许跳跃
 # 分析：定义走出边缘：不是通过跳跃进入空中的
 # 实现：检测上一帧是否尝试跳跃，基本等价于检测这一帧有无向上速度
-# 例外：跳跃了但无速度：上一帧跳跃但是碰撞，本帧无碰撞仍然可跳
-# 例外：没跳跃但有速度：上一帧非主观原因导致升空，存在逻辑错误
+# 例外：跳跃了但无速度：上一帧跳跃但是碰撞，本帧无碰撞仍然可跳（无所谓）
+# 例外：没跳跃但有速度：上一帧非主观原因导致升空，存在逻辑错误（用另一个状态区分可控不可控）
 @export var coyote_time_value := 0.1
 var coyote_timer := TinyTimer.new()
-
-# 问题：落地瞬间尝试跳跃失败
-# 分析：空中尝试跳跃失败，地面上没有尝试跳跃
-# 预期：尝试跳跃并失败后的一段时间内，接触地面的一瞬间自动进行跳跃
-# 分析：定义跳跃并失败：空中尝试跳跃，其他情况不考虑
-# 实现：空中尝试跳跃则开始计时，退出空中状态时进行跳跃
-@export var prejump_time_value := 0.1
-var prejump_timer := TinyTimer.new()
 
 var jump_higher_timer := TinyTimer.new()
 
 var double_jump_value: int
 var double_jump := 0
 
+func _ready():
+	super._ready()
+	coyote_timer.set_limit(coyote_time_value)
+	jump_higher_timer.set_limit(character.jump_higher_time_value())
+	double_jump_value = character.double_jump_value()
+
 func will_enter() -> bool:
 	return not character.is_on_floor()
 
 func on_enter() -> void:
 	super.on_enter()
-	
-	coyote_timer.set_limit(coyote_time_value)
-	prejump_timer.set_limit(prejump_time_value)
-	jump_higher_timer.set_limit(character.jump_higher_time_value())
-	double_jump_value = character.double_jump_value()
 
 	if jump_into_air():
 		jump_higher_timer.start_time()
@@ -44,23 +37,12 @@ func on_enter() -> void:
 		coyote_timer.start_time()
 		jump_higher_timer.final_time()
 	
-	prejump_timer.final_time()
 	start_double_jump()
-
-func on_exit() -> void:
-	super.on_exit()
-	if prejump_timer.in_time():
-		print("%s: prejump !!!" % Engine.get_physics_frames())
-		# do_jump_normal()
-		# 修改意图 让下个状态进行跳跃 因为修改了上下文 所以进入状态不能以主观意愿来判断 只能以客观条件判断
-		# 因为状态机是先更新状态，后进行 tick 的，所以这次改动会直接被下一个状态接收并处理
-		character.make_want_jump()
 
 #region jump_higher
 
 func jump_into_air() -> bool:
 	# 为什么这么实现详见 coyote_time
-	# 跳跃操作冗余迁移至意图后应该不用判断这个
 	var v_y := character.velocity.y
 	return not is_zero_approx(v_y) and v_y < 0
 
@@ -124,8 +106,6 @@ func tick_jump(delta: float) -> void:
 			add_double_jump()
 			do_jump_normal()
 			return
-		else:
-			prejump_timer.start_time()
 	elif character.want_jump_higher() and inner_state_combo.can_jump_higher:
 		if jump_higher_timer.in_time():
 			do_jump_higher_fall(delta)
@@ -150,7 +130,6 @@ func tick_move(delta: float):
 func tick_physics(delta: float) -> void:
 	jump_higher_timer.add_time(delta)
 	coyote_timer.add_time(delta)
-	prejump_timer.add_time(delta)
 	if can_jump_on_wall():
 		coyote_timer.start_time()
 

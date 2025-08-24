@@ -32,5 +32,5 @@ func end() -> bool:
 	return flow and time >= time_value
 
 ## 时间被强制结束
-func forced_final() -> bool:
+func is_forced_final() -> bool:
 	return not flow

@@ -24,16 +24,15 @@ var want_attack_keep_flag := false
 ## 摁住激活 防御姿态
 var want_block_keep_flag := false
 
-## 摁下触发 once 意为开始一段跳跃，摁下直到抬起视为一次跳跃
-var want_jump_once_flag := false
-## 摁住激活 higher 意为跳得更高，摁下直到抬起视为一次跳跃
-var want_jump_higher_flag := false
-
-# var want_dodge_flag := false
-# 闪避的容错时间 发现放在意图中更合适 后面可能会将跳跃一起迁过来 合并 coyote_timer prejump_timer
 ## 摁下触发 闪避/冲刺
 var dodge_delay_timer := TinyTimer.new()
 @export var dodge_delay_value := 0.1
+
+## 摁下触发 跳跃
+var jump_delay_timer := TinyTimer.new()
+@export var jump_delay_value := 0.1
+## 摁住激活 跳高
+var jump_flag := false
 
 const INPUT_MOVE_LEFT := "move_left"
 const INPUT_MOVE_RIGHT := "move_right"
@@ -46,11 +45,34 @@ const INPUT_BLOCK := "block"
 
 func _ready():
 	dodge_delay_timer.set_limit(dodge_delay_value)
-	dodge_delay_timer.final_time()
+	jump_delay_timer.set_limit(jump_delay_value)
 
+# 同一渲染帧中 执行顺序 _unhandled_input -> _physics_process -> _process
 func _unhandled_input(event: InputEvent):
+	# print("%s/%s, %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), "_unhandled_input"])
 	if event.is_action_pressed(INPUT_DODGE):
 		dodge_delay_timer.start_time()
+	elif event.is_action_pressed(INPUT_JUMP):
+		jump_delay_timer.start_time()
+		jump_flag = true
+	elif event.is_action_released(INPUT_JUMP):
+		jump_delay_timer.final_time()
+		jump_flag = false
+
+func _physics_process(delta: float) -> void:
+	# want
+	want_move_direction = Input.get_axis(INPUT_MOVE_LEFT, INPUT_MOVE_RIGHT)
+
+	# update timer
+	dodge_delay_timer.add_time(delta)
+	jump_delay_timer.add_time(delta)
+	
+	# update
+	state_machine.update_state()
+	# tick
+	state_machine.tick_physics(delta)
+
+	move_and_slide()
 
 func _process(delta: float) -> void:
 	want_look_angle = Input.get_axis(INPUT_LOOK_UP, INPUT_LOOK_DOWN)
@@ -60,27 +82,7 @@ func _process(delta: float) -> void:
 
 	want_block_keep_flag = Input.is_action_pressed(INPUT_BLOCK)
 
-	dodge_delay_timer.add_time(delta)
-
 	state_machine.tick_frame(delta)
-
-func _physics_process(delta: float) -> void:
-	# want
-	want_move_direction = Input.get_axis(INPUT_MOVE_LEFT, INPUT_MOVE_RIGHT)
-
-	want_jump_once_flag = Input.is_action_just_pressed(INPUT_JUMP)
-	want_jump_higher_flag = Input.is_action_pressed(INPUT_JUMP)
-	# if Input.is_action_just_released(INPUT_JUMP):
-	# 	want_jump_once_flag = false
-	# 	want_jump_higher_flag = false
-	# print(Engine.get_physics_frames(), ": want jump %s %s" % [want_jump_once_flag, want_jump_higher_flag])
-	
-	# update
-	state_machine.update_state()
-	# tick
-	state_machine.tick_physics(delta)
-
-	move_and_slide()
 
 #region movement_data
 
@@ -154,25 +156,20 @@ func want_look() -> bool:
 func want_move() -> bool:
 	return not is_zero_approx(want_move_direction)
 
-func make_want_jump() -> void:
-	# 修改意图 让下个状态进行跳跃 有点魔法的感觉 可能会导致BUG
-	# 状态退出后 上下文修改 应该要重新进行状态条件的判断 否则进入逻辑会与预期不一致
-	# 或者人为约定 状态的进入条件必须是客观条件 没有主观意愿（当前选择这个）
-	print("make_want_jump!!!")
-	want_jump_higher_flag = true
-	want_jump_once_flag = true
-
-func want_jump_once() -> bool:
-	return want_jump_once_flag
-
-func want_jump_higher() -> bool:
-	return want_jump_higher_flag
-
 func want_dodge() -> bool:
 	return dodge_delay_timer.in_time()
 
 func echo_dodge():
 	dodge_delay_timer.final_time()
+
+func want_jump_once() -> bool:
+	return jump_delay_timer.in_time()
+
+func want_jump_higher() -> bool:
+	return jump_flag
+
+func echo_jump():
+	jump_delay_timer.final_time()
 
 func want_attack_once() -> bool:
 	return want_attack_once_flag
@@ -218,10 +215,8 @@ func do_fall(delta: float, speed: float, g_scale: float) -> void:
 
 func do_jump_normal() -> void:
 	# print("%s : do_jump" % Engine.get_physics_frames())
+	echo_jump()
 	velocity.y = jump_velocity()
-
-func do_jump(speed: float) -> void:
-	velocity.y = speed
 
 #endregion
 

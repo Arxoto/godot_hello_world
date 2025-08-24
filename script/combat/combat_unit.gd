@@ -29,12 +29,10 @@ signal hit()
 
 func _ready():
 	for hitbox in hitboxs:
-		hitbox.hit.connect(self.on_hit)
+		hitbox.hit.connect(self.on_hit_hurt)
+		hitbox.combat_unit = self
 	for hurtbox in hurtboxs:
-		hurtbox.hurt.connect(self.on_hurt)
+		hurtbox.combat_unit = self
 
-func on_hit(hurtbox: Hurtbox):
-	print("[Hit]  from %s to %s" % [self.owner.name, hurtbox.owner.name])
-
-func on_hurt(hitbox: Hitbox):
-	print("[Hurt] into %s by %s" % [self.owner.name, hitbox.owner.name])
+func on_hit_hurt(hitbox: Hitbox, hurtbox: Hurtbox):
+	print("[Hit] from %s:%s to %s:%s" % [hitbox.owner.name, hitbox.name, hurtbox.owner.name, hurtbox.name])
