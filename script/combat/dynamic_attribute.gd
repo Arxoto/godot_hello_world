@@ -1,66 +1,51 @@
+## 动态属性（能力值） 兼容buff系统（不支持瞬时效果）
 class_name DynamicAttribute
 extends RefCounted
 
 var origin := 0.0
 var current := 0.0
 
-enum EffectType {
-	BASIC,
-	MULTI,
-	FINAL,
-}
+## 存储该属性的效果
+var effect_map: Dictionary[StringName, AttributeEffect] = {}
 
-var basic_map: Dictionary[StringName, Effect] = {}
-var multi_map: Dictionary[StringName, Effect] = {}
-var final_map: Dictionary[StringName, Effect] = {}
+func init_value(v: float):
+	origin = v
+	current = v
 
-func get_effect_map(t: EffectType) -> Dictionary[StringName, Effect]:
-	match t:
-		EffectType.BASIC:
-			return basic_map
-		EffectType.MULTI:
-			return multi_map
-		EffectType.FINAL:
-			return final_map
-		_:
-			return {}
+func get_value() -> float:
+	return current
 
 func refresh_value():
-	current = origin
-	for effect: Effect in basic_map.values():
-		for i in range(effect.stack):
-			current += effect.value
-	
-	var coefficient := 1.0
-	for effect: Effect in multi_map.values():
-		for i in range(effect.stack):
-			coefficient += effect.value
-	current *= coefficient
+	var am := AttributeEffect.AttributeModifier.new()
+	for ae: AttributeEffect in effect_map.values():
+		am.reduce(ae)
+	current = am.do_effect(origin)
 
-	for effect: Effect in final_map.values():
-		for i in range(effect.stack):
-			current *= effect.value
-
-## 加入效果 调用后需要手动刷新
-func put_effect(t: EffectType, e: Effect):
-	var emap := get_effect_map(t)
-	if emap.has(e.effect_name):
-		var effect: Effect = emap.get(e.effect_name)
-		effect.refresh_and_stack()
+## 加入持续效果 调用后需要手动刷新属性值
+func use_attr_effect(ae: AttributeEffect):
+	var effect_name := ae.effect.effect_name
+	if effect_map.has(effect_name):
+		var a_effect: AttributeEffect = effect_map.get(effect_name)
+		a_effect.effect.refresh_and_add_stack(ae.effect)
 	else:
-		emap.set(e.effect_name, e)
-		e.start_time()
+		effect_map.set(effect_name, ae)
+		ae.effect.restart_life()
 
+## 内部自动调用刷新属性值
 func process_time(delta: float):
 	var changed := false
-	for map in [basic_map, multi_map, final_map]:
-		for key in map.keys():
-			var effect: Effect = map.get(key)
-			if effect.is_duration():
-				var is_expired := effect.process_time_and_expired(delta)
-				changed = changed or is_expired
-				if is_expired:
-					map.erase(key)
+
+	for effect_name in effect_map.keys():
+		var ae: AttributeEffect = effect_map.get(effect_name)
+		var periods := ae.effect.process_period(delta)
+
+		if periods:
+			ae.effect.add_stack(periods)
+			changed = true
+		
+		if ae.effect.is_expired():
+			effect_map.erase(effect_name)
+			changed = true
 	
 	if changed:
 		refresh_value()

@@ -16,8 +16,7 @@ func can_climb() -> bool:
 		return false
 	
 	# can climb 墙面法线和移动方向必须相反，使用点积计算投影
-	# 这里使用了意图进行判断 与约定的使用客观条件进行判断不符 但是因为判断进入条件是在逻辑开头 此时还未赋予速度 且因为靠墙导致上一帧碰撞后速度为零
-	# todo 把跳跃操作冗余迁移到意图判断中 也许可以将约定取消
+	# 上一帧撞墙会导致下一帧速度为零 所以使用意图进行判断
 	var move_vector := Vector2(character.want_move_direction, 0)
 	var wall_normal := character.get_wall_normal()
 	var valid_dot := wall_normal.dot(move_vector)
