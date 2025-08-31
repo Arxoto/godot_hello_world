@@ -34,7 +34,7 @@ func tick_physics(delta: float) -> void:
 	if character.want_move() and inner_state_combo.can_move:
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
 	
-	play_turn()
+	if inner_state_combo.can_turn: play_turn()
 	
 	play_loop_anim(character.anim_player.anim_climb)
 

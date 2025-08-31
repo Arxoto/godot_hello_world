@@ -10,6 +10,7 @@ var the_max := DynamicAttribute.new()
 var current: float
 
 ## 存储特殊效果
+## 需要注意 由于是直接覆盖叠加的 因此统计伤害时可能会不准确 根据游戏性自行调整
 var effect_map: Dictionary[StringName, DynPropDurEffect] = {}
 
 # max_v 默认使用 v 的值

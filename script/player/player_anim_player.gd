@@ -68,7 +68,8 @@ func try_play(anim: String):
 		play(anim)
 
 func play(anim: String):
-	# print("play anim: ", anim)
+	# print("%s/%s, play anim: %s, can_turn: %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), anim, state_combo.can_turn])
 	state_combo.reset_controller() # 该版本的动画播放器开启确定性混合后貌似对循环动画不生效，手动调用
+	# 将过渡动画分段处理的话 动画之间有一帧会因为 reset_controller 导致值恰好突变  注意即可 暂不处理
 	current_anim = anim
 	anim_player.play(anim)

@@ -118,14 +118,12 @@ func tick_jump(delta: float) -> void:
 func tick_move(delta: float):
 	if inner_state_combo.do_dodge:
 		character.do_dodge(delta, inner_state_combo.do_fast_dodge)
-		return
-	
-	if character.want_move() and inner_state_combo.can_move:
+	elif character.want_move() and inner_state_combo.can_move:
 		character.do_move(delta, character.want_move_direction * character.air_speed(), character.air_acceleration())
 	else:
 		character.do_move(delta, 0, character.air_resistance())
 	
-	play_turn()
+	if inner_state_combo.can_turn: play_turn()
 
 func tick_physics(delta: float) -> void:
 	jump_higher_timer.add_time(delta)

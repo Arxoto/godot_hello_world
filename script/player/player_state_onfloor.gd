@@ -48,17 +48,14 @@ func tick_jump(delta: float):
 	# 站立时跳跃 结束计时 不会重复生效
 
 func tick_move(delta: float):
-	# todo 攻击可以向前移动（根据攻击时的速度判断） 但无法转身
 	if inner_state_combo.do_dodge:
 		character.do_dodge(delta, inner_state_combo.do_fast_dodge)
-		return
-	
-	if character.want_move() and inner_state_combo.can_move:
+	elif character.want_move() and inner_state_combo.can_move:
 		character.do_move(delta, character.want_move_direction * character.run_speed(), character.run_acceleration())
 	else:
 		character.do_move(delta, 0, character.run_resistance())
 	
-	play_turn()
+	if inner_state_combo.can_turn: play_turn()
 
 func tick_physics(delta: float) -> void:
 	tick_jump(delta)

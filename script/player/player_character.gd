@@ -169,7 +169,7 @@ func want_jump_higher() -> bool:
 	return jump_flag
 
 func echo_jump():
-	if jump_delay_timer.time > 0.02: print("pre jump time: ", jump_delay_timer.time)
+	# if jump_delay_timer.time > 0.02: print("pre jump time: ", jump_delay_timer.time)
 	jump_delay_timer.final_time()
 
 func want_attack_once() -> bool:
@@ -225,6 +225,7 @@ func do_jump_normal() -> void:
 
 func play_turn() -> void:
 	if want_move():
+		# if body.scale.x * want_move_direction < 0: print("%s/%s, play turn to" % [Engine.get_process_frames(), Engine.get_physics_frames()])
 		body.scale.x = -1.0 if want_move_direction < 0 else 1.0
 
 func play_once_anim(anim: String) -> void:
