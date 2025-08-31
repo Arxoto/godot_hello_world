@@ -16,14 +16,6 @@ var max_stack := 1
 
 #region newer
 
-## 【立即生效】型效果
-static func new_instant(from_name_v: StringName, effect_name_v: StringName, v: float) -> Effect:
-	var e := Effect.new()
-	e.from_name = from_name_v
-	e.effect_name = effect_name_v
-	e.value = v
-	return e
-
 ## 【持续存在】型效果 [br]
 ## [duration_time_ms] 持续时间 零和负数表示无限存在 [br]
 ## [period_time_ms] 生效周期 零和负数表示不重复生效 [br]
