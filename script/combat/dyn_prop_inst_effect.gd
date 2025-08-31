@@ -14,6 +14,12 @@ enum Type {
 var effect: Effect
 var type: Type
 
+static func new_effect(t: Type, e: DurationEffect) -> DynPropInstEffect:
+	var pe := DynPropInstEffect.new()
+	pe.type = t
+	pe.effect = e
+	return pe
+
 # 生效效果 仅属性类调用
 func do_effect_alter_proxy(prop: DynamicProperty) -> float:
 	match type:

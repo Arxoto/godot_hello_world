@@ -12,7 +12,10 @@ func init_value(v: float):
 	origin = v
 	current = v
 
-func get_value() -> float:
+func get_origin_value() -> float:
+	return origin
+
+func get_current_value() -> float:
 	return current
 
 func refresh_value():
@@ -43,6 +46,7 @@ func process_time(delta: float):
 		var periods := ae.effect.process_period(delta)
 
 		if periods:
+			# 周期性通过堆叠体现
 			ae.effect.add_stack(periods)
 			changed = true
 		

@@ -16,3 +16,6 @@ static func new_instant(from_name_v: StringName, effect_name_v: StringName, v: f
 	e.effect_name = effect_name_v
 	e.value = v
 	return e
+
+func set_value(v: float):
+	value = v

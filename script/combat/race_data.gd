@@ -2,51 +2,64 @@ class_name RaceData
 extends Resource
 
 ## 升级所需的经验公式 exp = exp_mult * exp_base ^ level
-var exp_mult := 100
+@export var exp_mult := 100
 ## 升级所需的经验公式 exp = exp_mult * exp_base ^ level
-var exp_base := 2
+@export var exp_base := 2
 
 ## 升级所需的经验值（若有值则优先）
-var exp_needs: Array[int]
+@export var exp_needs: Array[int]
 
 ## 等级上限
-var max_level := 10
+@export var max_level := 10
 ## 每级自由点数
-var free_points := 1
+@export var free_points := 1
 
 ## 气力基础值
-var strength_base := 100.0
+@export var strength_base := 100.0
 ## 每点气力成长值
-var strength_scale := 10.0
+@export var strength_scale := 10.0
 ## 每级气力成长加点
-var strength_points := 1
+@export var strength_points := 1
 
 ## 信念基础值
-var belief_base := 100.0
+@export var belief_base := 100.0
 ## 每点信念成长值
-var belief_scale := 10.0
+@export var belief_scale := 10.0
 ## 每级信念成长加点
-var belief_points := 1
+@export var belief_points := 1
 
 ## 血量基础值
-var health_base := 100.0
+@export var health_base := 100.0
 ## 血量成长值（根据气力）
-var health_scale := 0.3
-## 每秒回复最大血量的 1%
-var health_recover_ratio := 0.01
-## 每秒回复 0.5
-var health_recover_value := 0.5
-# todo 血量回复效果 百分比和定值分别实现
+@export var health_scale := 0.3
+## 血量 每次回复间隔时间
+@export var health_recover_period_ms := 1000
+## 血量 每次回复上限的 1%
+@export var health_recover_ratio := 0.01
+## 血量 每次回复 0.5
+@export var health_recover_value := 0.5
 
-## 连贯 最大值
-var stamina_max := 100.0
+## 连贯最大值
+@export var stamina_max := 100.0
+## 连贯 下降的延迟时间
+@export var stamina_wait_ms := 3000
+## 连贯 下降的间隔时间 2s清空
+@export var stamina_period_ms := 100
+## 连贯 下降的值 2s清空
+@export var stamina_decline_value := 5.0
 
 ## 气势最大值 基础值
-var magicka_max_base := 100.0
+@export var magicka_max_base := 100.0
 ## 气势最大值 成长值（根据信念）
-var magicka_max_scale := 0.2
-## 气势趋向值 基础值
-var magicka_target_base := 30.0
+@export var magicka_max_scale := 0.2
+## 气势 本我趋向值
+@export var magicka_target_self := 30.0
+## 气势 趋向的间隔时间 todo耗时待确认
+@export var magicka_target_period_ms := 200
+## 气势 本我趋向的速度 todo耗时待确认
+@export var magicka_target_self_stack := 3
+## 气势 外界趋向的速度 todo耗时待确认
+@export var magicka_target_env_stack := 2
 
 ## 返回下一等级所需经验 零和负数表示无法升级
 func need_exp(level: int) -> int:

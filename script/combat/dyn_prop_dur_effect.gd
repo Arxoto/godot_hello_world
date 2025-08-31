@@ -19,10 +19,19 @@ enum Type {
 	CUR_PER,
 	## 持续根据最大值的百分比修改当前值
 	CUR_MAX_PER,
+
+	## 根据当前值与给定值的差逐渐逼近 倍率固定0.01 通过频率和堆叠修改速度
+	CUR_TAR_DELTA_001,
 }
 
 var effect: DurationEffect
 var type: Type
+
+static func new_effect(t: Type, e: DurationEffect) -> DynPropDurEffect:
+	var pe := DynPropDurEffect.new()
+	pe.type = t
+	pe.effect = e
+	return pe
 
 # 赋予效果 仅属性类调用
 func put_effect_proxy(prop: DynamicProperty):
@@ -37,8 +46,9 @@ func put_effect_proxy(prop: DynamicProperty):
 			prop.put_prop_effect_proxy(self)
 
 # 生效效果 仅属性类调用
-func do_effect_alter_proxy(prop: DynamicProperty):
+func do_effect_alter_proxy(prop: DynamicProperty, periods: int):
 	var e := DynPropInstEffect.new()
+	e.effect = Effect.new_instant(effect.from_name, effect.effect_name, effect.value * effect.stack * periods)
 	match type:
 		Type.CUR_VAL:
 			e.type = DynPropInstEffect.Type.CUR_VAL
@@ -46,7 +56,9 @@ func do_effect_alter_proxy(prop: DynamicProperty):
 			e.type = DynPropInstEffect.Type.CUR_PER
 		Type.CUR_MAX_PER:
 			e.type = DynPropInstEffect.Type.CUR_MAX_PER
+		Type.CUR_TAR_DELTA_001:
+			e.type = DynPropInstEffect.Type.CUR_VAL
+			e.effect.set_value((effect.value - prop.get_current_value()) * 0.01 * effect.stack * periods)
 		_:
 			return
-	e.effect = Effect.new_instant(effect.from_name, effect.effect_name, effect.value)
 	e.do_effect_alter_proxy(prop)

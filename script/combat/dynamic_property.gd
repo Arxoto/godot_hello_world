@@ -55,12 +55,11 @@ func process_time(delta: float):
 		var pe: DynPropDurEffect = effect_map.get(effect_name)
 		var periods := pe.effect.process_period(delta)
 
-		for i in range(periods):
-			pe.do_effect_alter_proxy(self)
+		if periods:
+			pe.do_effect_alter_proxy(self, periods)
 		
 		if pe.effect.is_expired():
 			effect_map.erase(effect_name)
-	fix_current_value()
 
 #region effect_proxy
 

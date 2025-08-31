@@ -38,17 +38,13 @@ class AttributeModifier extends RefCounted:
 		var de := ae.effect
 		match ae.type:
 			Type.BASIC_ADD:
-				for i in range(de.stack):
-					basic_add += de.value
+				basic_add += de.value * de.stack
 			Type.FINAL_MULTI:
-				for i in range(de.stack):
-					final_multi *= de.value
+				final_multi *= de.value ** de.stack
 			Type.BASIC_PERCENT:
-				for i in range(de.stack):
-					basic_percent += de.value
+				basic_percent += de.value * de.stack
 			Type.FINAL_PERCENT:
-				for i in range(de.stack):
-					final_percent += de.value
+				final_percent += de.value * de.stack
 
 	func do_effect(v: float) -> float:
 		return (v + v * basic_percent + basic_add) * (1.0 + final_percent) * final_multi

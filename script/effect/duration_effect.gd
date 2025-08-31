@@ -8,6 +8,8 @@ var life_time := 0.0
 var duration_ms := 0
 ## 生效周期 零和负数表示不重复生效
 var period_ms := 0
+## 生效等待时间
+var wait_ms := 0
 
 ## 堆叠层数 重新添加效果时触发
 var stack := 1
@@ -16,17 +18,33 @@ var max_stack := 1
 
 #region newer
 
-## 【持续存在】型效果 [br]
-## [duration_time_ms] 持续时间 零和负数表示无限存在 [br]
-## [period_time_ms] 生效周期 零和负数表示不重复生效 [br]
-static func new_duration(from_name_v: StringName, effect_name_v: StringName, v: float, duration_time_ms := 0, period_time_ms := 0) -> DurationEffect:
+## 【持续存在】型效果
+static func new_duration(from_name_v: StringName, effect_name_v: StringName, v: float) -> DurationEffect:
 	var de := DurationEffect.new()
 	de.from_name = from_name_v
 	de.effect_name = effect_name_v
 	de.value = v
-	de.duration_ms = duration_time_ms
-	de.period_ms = period_time_ms
 	return de
+
+## 设置堆叠上限
+func with_max_stack(v: int) -> DurationEffect:
+	max_stack = v
+	return self
+
+## 设置持续时间 零和负数表示无限存在
+func with_duration_ms(v: int) -> DurationEffect:
+	duration_ms = v
+	return self
+
+## 设置生效周期 零和负数表示不重复生效
+func with_period_ms(v: int) -> DurationEffect:
+	period_ms = v
+	return self
+
+## 设置生效等待时间
+func with_wait_ms(v: int) -> DurationEffect:
+	wait_ms = v
+	return self
 
 #endregion
 
@@ -54,6 +72,13 @@ func is_expired() -> bool:
 		return false
 	return (life_time * 1000 as int) >= duration_ms
 
+## 当前时间总共生效次数
+func period_counts() -> int:
+	var life_ms = duration_ms if is_expired() else (life_time * 1000 as int)
+	if life_ms > wait_ms:
+		return (life_ms - wait_ms) % period_ms
+	return 0
+
 ## 处理时间 返回周期生效次数
 func process_period(delta: float) -> int:
 	if is_expired():
@@ -63,18 +88,9 @@ func process_period(delta: float) -> int:
 		life_time += delta
 		return 0
 	
-	var old_count: int = (life_time * 1000 as int) % period_ms
+	var old_count := period_counts()
 	life_time += delta
-	var new_count: int = (life_time * 1000 as int) % period_ms
-	if is_expired():
-		return duration_ms % period_ms
-	else:
-		return new_count - old_count
-
-## 设置堆叠上限
-func limit_max_stack(v: int) -> DurationEffect:
-	max_stack = v
-	return self
+	return period_counts() - old_count
 
 ## 尝试叠加 返回叠加后的层数
 func add_stack(c: int) -> int:
