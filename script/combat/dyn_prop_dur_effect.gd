@@ -37,11 +37,11 @@ static func new_effect(t: Type, e: DurationEffect) -> DynPropDurEffect:
 func put_effect_proxy(prop: DynamicProperty):
 	match type:
 		Type.MAX_VAL:
-			prop.put_max_attr_effect(DynAttrEffect.new_effect(DynAttrEffect.Type.BASIC_ADD, effect))
+			prop.put_max_attr_effect_proxy(DynAttrEffect.new_effect(DynAttrEffect.Type.BASIC_ADD, effect))
 		Type.MAX_PER:
-			prop.put_max_attr_effect(DynAttrEffect.new_effect(DynAttrEffect.Type.BASIC_PERCENT, effect))
+			prop.put_max_attr_effect_proxy(DynAttrEffect.new_effect(DynAttrEffect.Type.BASIC_PERCENT, effect))
 		Type.MIN_VAL:
-			prop.put_min_attr_effect(DynAttrEffect.new_effect(DynAttrEffect.Type.BASIC_ADD, effect))
+			prop.put_min_attr_effect_proxy(DynAttrEffect.new_effect(DynAttrEffect.Type.BASIC_ADD, effect))
 		_:
 			prop.put_prop_effect_proxy(self)
 
@@ -49,16 +49,16 @@ func put_effect_proxy(prop: DynamicProperty):
 func do_effect_alter_proxy(prop: DynamicProperty, periods: int):
 	var e := DynPropInstEffect.new()
 	e.effect = Effect.new_instant(effect.from_name, effect.effect_name, effect.value * effect.stack * periods)
-	match type:
-		Type.CUR_VAL:
-			e.type = DynPropInstEffect.Type.CUR_VAL
-		Type.CUR_PER:
-			e.type = DynPropInstEffect.Type.CUR_PER
-		Type.CUR_MAX_PER:
-			e.type = DynPropInstEffect.Type.CUR_MAX_PER
-		Type.CUR_TAR_DELTA_001:
-			e.type = DynPropInstEffect.Type.CUR_VAL
-			e.effect.set_value((effect.value - prop.get_current_value()) * 0.01 * effect.stack * periods)
-		_:
-			return
-	e.do_effect_alter_proxy(prop)
+	#match type:
+		#Type.CUR_VAL:
+			#e.type = DynPropInstEffect.Type.CUR_VAL
+		#Type.CUR_PER:
+			#e.type = DynPropInstEffect.Type.CUR_PER
+		#Type.CUR_MAX_PER:
+			#e.type = DynPropInstEffect.Type.CUR_MAX_PER
+		#Type.CUR_TAR_DELTA_001:
+			#e.type = DynPropInstEffect.Type.CUR_VAL
+			#e.effect.set_value((effect.value - prop.get_current_value()) * 0.01 * effect.stack * periods)
+		#_:
+			#return
+	#e.do_effect_alter_proxy(prop)

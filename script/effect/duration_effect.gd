@@ -5,11 +5,11 @@ extends Effect
 ## 存在计时（仅非瞬发生效）
 var life_time := 0.0
 ## 持续时间 零和负数表示无限存在
-var duration_ms := 0
+var duration_time := 0.0
 ## 生效周期 零和负数表示不重复生效
-var period_ms := 0
+var period_time := 0.0
 ## 生效等待时间
-var wait_ms := 0
+var wait_time := 0.0
 
 ## 堆叠层数 重新添加效果时触发
 var stack := 1
@@ -32,18 +32,18 @@ func with_max_stack(v: int) -> DurationEffect:
 	return self
 
 ## 设置持续时间 零和负数表示无限存在
-func with_duration_ms(v: int) -> DurationEffect:
-	duration_ms = v
+func with_duration(v: float) -> DurationEffect:
+	duration_time = v
 	return self
 
 ## 设置生效周期 零和负数表示不重复生效
-func with_period_ms(v: int) -> DurationEffect:
-	period_ms = v
+func with_period(v: float) -> DurationEffect:
+	period_time = v
 	return self
 
 ## 设置生效等待时间
-func with_wait_ms(v: int) -> DurationEffect:
-	wait_ms = v
+func with_wait(v: float) -> DurationEffect:
+	wait_time = v
 	return self
 
 #endregion
@@ -52,15 +52,15 @@ func with_wait_ms(v: int) -> DurationEffect:
 
 ## 是否无限存在
 func is_infinite() -> bool:
-	return duration_ms <= 0
+	return duration_time <= 0
 
 ## 是否持续一段时间
 func is_duration() -> bool:
-	return duration_ms > 0
+	return duration_time > 0
 
 ## 是否周期生效
 func is_period() -> bool:
-	return period_ms > 0
+	return period_time > 0
 
 ## 重新开始计时
 func restart_life():
@@ -70,13 +70,13 @@ func restart_life():
 func is_expired() -> bool:
 	if not is_duration():
 		return false
-	return (life_time * 1000 as int) >= duration_ms
+	return life_time >= duration_time
 
 ## 当前时间总共生效次数
 func period_counts() -> int:
-	var life_ms = duration_ms if is_expired() else (life_time * 1000 as int)
-	if life_ms > wait_ms:
-		return (life_ms - wait_ms) % period_ms
+	var life_t := duration_time if is_expired() else life_time
+	if life_t > wait_time:
+		return ((life_t - wait_time) / period_time) as int
 	return 0
 
 ## 处理时间 返回周期生效次数
@@ -101,7 +101,12 @@ func add_stack(c: int) -> int:
 func refresh_and_add_stack(de: DurationEffect) -> int:
 	self.from_name = de.from_name
 	self.value = de.value
+	# 延迟和周期等不重置 以此顺序可最大收益 高频次-高层数-高加成
 	restart_life()
 	return add_stack(de.stack)
+
+func restart_effect(e: Effect):
+	self.from_name = e.from_name
+	restart_life()
 
 #endregion

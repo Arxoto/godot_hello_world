@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cgycebvnfefx2"]
+[gd_scene load_steps=22 format=3 uid="uid://cgycebvnfefx2"]
 
 [ext_resource type="Texture2D" uid="uid://cc3cl6v6j0ub1" path="res://texture/Mob/Boar/Idle/Idle-Sheet.png" id="1_4ov56"]
 [ext_resource type="Script" uid="uid://cybxqfh2hq66y" path="res://boar.gd" id="1_5v2dv"]
@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://xibjk0v8latl" path="res://script/character/state_land_floor_run.gd" id="7_2s4f2"]
 [ext_resource type="Script" uid="uid://byn4xqhyoi1p1" path="res://script/character/state_land_floor_peace_walk.gd" id="8_d8vwy"]
 [ext_resource type="Script" uid="uid://bv1sh37x35lrb" path="res://script/character/state_land_floor_peace_idle.gd" id="9_olp25"]
-[ext_resource type="Script" uid="uid://dwt4hssxu4uw" path="res://script/combat/combat_entity.gd" id="12_d8vwy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d1qa8"]
 size = Vector2(23, 25)
@@ -350,8 +349,3 @@ metadata/_custom_type_script = "uid://byn4xqhyoi1p1"
 [node name="StateLandIdle" type="Node" parent="TransitionStateMachine"]
 script = ExtResource("9_olp25")
 metadata/_custom_type_script = "uid://bv1sh37x35lrb"
-
-[node name="CombatUnit" type="Node" parent="." node_paths=PackedStringArray("graphics")]
-script = ExtResource("12_d8vwy")
-graphics = NodePath("../Graphics")
-metadata/_custom_type_script = "uid://dwt4hssxu4uw"

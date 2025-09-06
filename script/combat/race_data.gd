@@ -33,7 +33,7 @@ extends Resource
 ## 血量成长值（根据气力）
 @export var health_scale := 0.3
 ## 血量 每次回复间隔时间
-@export var health_recover_period_ms := 1000
+@export var health_recover_period := 1.0
 ## 血量 每次回复上限的 1%
 @export var health_recover_ratio := 0.01
 ## 血量 每次回复 0.5
@@ -42,11 +42,11 @@ extends Resource
 ## 连贯最大值
 @export var stamina_max := 100.0
 ## 连贯 下降的延迟时间
-@export var stamina_wait_ms := 3000
+@export var stamina_wait := 3.0
 ## 连贯 下降的间隔时间 2s清空
-@export var stamina_period_ms := 100
+@export var stamina_period := 0.1
 ## 连贯 下降的值 2s清空
-@export var stamina_decline_value := 5.0
+@export var stamina_decline_value := -5.0
 
 ## 气势最大值 基础值
 @export var magicka_max_base := 100.0
@@ -55,7 +55,7 @@ extends Resource
 ## 气势 本我趋向值
 @export var magicka_target_self := 30.0
 ## 气势 趋向的间隔时间 todo耗时待确认
-@export var magicka_target_period_ms := 200
+@export var magicka_target_period := 0.2
 ## 气势 本我趋向的速度 todo耗时待确认
 @export var magicka_target_self_stack := 3
 ## 气势 外界趋向的速度 todo耗时待确认

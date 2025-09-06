@@ -1,7 +1,7 @@
 class_name CombatUnit
 extends RefCounted
 
-@export var race_data: RaceData
+@export var race_data: RaceData = RaceData.new()
 
 #region 战时动态值
 
@@ -65,23 +65,23 @@ func init_props():
 	defence.init_value(0.0)
 
 func effect_props(owner_name: StringName, magicka_target_env: float):
-	var hrr := DurationEffect.new_duration(owner_name, EffectNames.HEALTH_RECOVER_RATIO, race_data.health_recover_ratio).with_period_ms(race_data.health_recover_period_ms)
+	var hrr := DurationEffect.new_duration(owner_name, EffectNames.HEALTH_RECOVER_RATIO, race_data.health_recover_ratio).with_period(race_data.health_recover_period)
 	health.put_dur_effect(DynPropDurEffect.new_effect(DynPropDurEffect.Type.CUR_MAX_PER, hrr))
-	var hrv := DurationEffect.new_duration(owner_name, EffectNames.HEALTH_RECOVER_VALUE, race_data.health_recover_value).with_period_ms(race_data.health_recover_period_ms)
+	var hrv := DurationEffect.new_duration(owner_name, EffectNames.HEALTH_RECOVER_VALUE, race_data.health_recover_value).with_period(race_data.health_recover_period)
 	health.put_dur_effect(DynPropDurEffect.new_effect(DynPropDurEffect.Type.CUR_VAL, hrv))
 	health.refresh_value()
 
 	var sdv := DurationEffect.new_duration(owner_name, EffectNames.STAMINA_DECLINE, race_data.stamina_decline_value)
-	sdv.with_wait_ms(race_data.stamina_wait_ms).with_period_ms(race_data.stamina_period_ms)
+	sdv.with_wait(race_data.stamina_wait).with_period(race_data.stamina_period)
 	stamina.put_dur_effect(DynPropDurEffect.new_effect(DynPropDurEffect.Type.CUR_VAL, sdv))
 	stamina.refresh_value()
 
 	var mts := DurationEffect.new_duration(owner_name, EffectNames.MAGICKA_FLOW_SELF, race_data.magicka_target_self)
-	mts.with_period_ms(race_data.magicka_target_period_ms).with_max_stack(race_data.magicka_target_self_stack).add_stack(race_data.magicka_target_self_stack)
-	stamina.put_dur_effect(DynPropDurEffect.new_effect(DynPropDurEffect.Type.CUR_TAR_DELTA_001, mts))
+	mts.with_period(race_data.magicka_target_period).with_max_stack(race_data.magicka_target_self_stack).add_stack(race_data.magicka_target_self_stack)
+	magicka.put_dur_effect(DynPropDurEffect.new_effect(DynPropDurEffect.Type.CUR_TAR_DELTA_001, mts))
 	var mte := DurationEffect.new_duration(owner_name, EffectNames.MAGICKA_FLOW_ENV, magicka_target_env)
-	mte.with_period_ms(race_data.magicka_target_period_ms).with_max_stack(race_data.magicka_target_env_stack).add_stack(race_data.magicka_target_env_stack)
-	stamina.put_dur_effect(DynPropDurEffect.new_effect(DynPropDurEffect.Type.CUR_TAR_DELTA_001, mte))
+	mte.with_period(race_data.magicka_target_period).with_max_stack(race_data.magicka_target_env_stack).add_stack(race_data.magicka_target_env_stack)
+	magicka.put_dur_effect(DynPropDurEffect.new_effect(DynPropDurEffect.Type.CUR_TAR_DELTA_001, mte))
 	magicka.refresh_value()
 
 	defence.refresh_value()

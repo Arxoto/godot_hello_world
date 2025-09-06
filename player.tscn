@@ -2179,7 +2179,7 @@ metadata/_custom_type_script = "uid://bgmpddrbrnpld"
 script = ExtResource("21_7ahtn")
 metadata/_custom_type_script = "uid://hlfo6g4oy6tp"
 
-[node name="CombatUnit" type="Node" parent="." node_paths=PackedStringArray("graphics")]
+[node name="CombatEntity" type="Node" parent="." node_paths=PackedStringArray("graphics")]
 script = ExtResource("21_5tmop")
 graphics = NodePath("../TheBody")
 metadata/_custom_type_script = "uid://dwt4hssxu4uw"

@@ -1,5 +1,5 @@
 ## 瞬时效果
-class_name DynPropInstEffect
+#class_name DynPropInstEffect
 extends RefCounted
 
 enum Type {
@@ -14,7 +14,7 @@ enum Type {
 var effect: Effect
 var type: Type
 
-static func new_effect(t: Type, e: DurationEffect) -> DynPropInstEffect:
+static func new_effect(t: Type, e: Effect) -> DynPropInstEffect:
 	var pe := DynPropInstEffect.new()
 	pe.type = t
 	pe.effect = e

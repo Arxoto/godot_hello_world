@@ -1,6 +1,9 @@
 class_name CombatEntity
 extends Node
 
+var level_up := LevelUp.new()
+# var combat_unit := CombatUnit.new()
+
 var combat_state := CombatState.NROMAL
 var shield_state := ShieldState.NO_SHIELD
 
@@ -13,6 +16,11 @@ var hitboxs: Array[Hitbox] = []
 var hurtboxs: Array[Hurtbox] = []
 
 func _ready():
+	# combat_unit.init_inner_attrs(level_up)
+	# combat_unit.init_outer_attrs()
+	# combat_unit.effect_attrs()
+	# combat_unit.init_props()
+	# combat_unit.effect_props(owner.name, 0.0)
 	for node in graphics.get_children():
 		if node is Hitbox:
 			hitboxs.append(node)
@@ -21,13 +29,46 @@ func _ready():
 	
 	for hitbox in hitboxs:
 		hitbox.hit.connect(self.on_hit_hurt)
-		hitbox.combat_unit = self
+		hitbox.combat_entity = self
 	for hurtbox in hurtboxs:
-		hurtbox.combat_unit = self
+		hurtbox.combat_entity = self
+
+var test_flag := 0
+var test_time := 0.0
+func _process(_delta):
+	EffectNames.aaaaa()
+	# combat_unit.process_time(delta)
+	# if owner.name == "Player":
+	# 	# print("player health ", combat_unit.health.get_current_value())
+	# 	print("player stamina ", combat_unit.stamina.get_current_value())
+	# 	if test_flag == 0:
+	# 		if combat_unit.stamina.get_current_value() >= 50.0:
+	# 			test_flag = 1
+	# 			print("test time ", test_time)
+	# 	elif test_flag == 1:
+	# 		test_time += delta
+	# 		if combat_unit.stamina.get_current_value() < 50.0:
+	# 			test_flag = 2
+	# 			print("test time ", test_time)
+	# 	elif test_flag == 2:
+	# 		test_time += delta
+	# 		if combat_unit.stamina.get_current_value() == 0.0:
+	# 			test_flag = 3
+	# 			print("test time ", test_time)
+
 
 func on_hit_hurt(hitbox: Hitbox, hurtbox: Hurtbox):
 	print("[Hit] from %s:%s to %s:%s" % [hitbox.owner.name, hitbox.name, hurtbox.owner.name, hurtbox.name])
-	match hurtbox.combat_unit.combat_state:
+
+	# # 扣血 测试回复
+	# hurtbox.combat_entity.combat_unit.health.use_inst_effect_alter(DynPropInstEffect.new_effect(DynPropInstEffect.Type.CUR_VAL, Effect.new_instant(hitbox.owner.name, EffectNames.PHYSICS_DAMAGE, -20.0)))
+	
+	# # 加连贯值 测试延迟扣除 需要重置效果时间
+	# hurtbox.combat_entity.combat_unit.stamina.restart_dur_effect(Effect.new_instant(hitbox.owner.name, EffectNames.PHYSICS_DAMAGE, 0))
+	# hurtbox.combat_entity.combat_unit.stamina.refresh_value()
+	#hurtbox.combat_entity.combat_unit.stamina.use_inst_effect_alter(DynPropInstEffect.new_effect(DynPropInstEffect.Type.CUR_VAL, Effect.new_instant(hitbox.owner.name, EffectNames.PHYSICS_DAMAGE, 50.0)))
+
+	match hurtbox.combat_entity.combat_state:
 		CombatState.NROMAL:
 			pass
 		CombatState.DODGE_PERFECT:

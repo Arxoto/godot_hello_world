@@ -37,6 +37,12 @@ func refresh_value():
 	the_min.refresh_value()
 	fix_current_value()
 
+## 仅重置效果 不影响值 调用后需要手动刷新属性值
+func restart_dur_effect(e: Effect):
+	if effect_map.has(e.effect_name):
+		var p_effect: DynPropDurEffect = effect_map.get(e.effect_name)
+		p_effect.effect.restart_effect(e)
+
 ## 持久效果 可外部调用 调用后需要手动刷新属性值
 func put_dur_effect(pe: DynPropDurEffect):
 	pe.put_effect_proxy(self)

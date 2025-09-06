@@ -3,7 +3,7 @@ extends Area2D
 
 signal hit(hitbox, hurtbox)
 
-var combat_unit: CombatEntity
+var combat_entity: CombatEntity
 
 func _init():
 	monitoring = true
