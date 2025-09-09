@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://s0mol8xpob87"]
+[gd_scene load_steps=49 format=3 uid="uid://s0mol8xpob87"]
 
 [ext_resource type="Script" uid="uid://bgwonvxvahey8" path="res://script/player/player_character.gd" id="1_1jxqw"]
 [ext_resource type="Texture2D" uid="uid://curyyv80gd6qf" path="res://texture/char_blue_1.png" id="1_4flbx"]
@@ -21,6 +21,8 @@
 [ext_resource type="Script" uid="uid://bgmpddrbrnpld" path="res://script/player/player_combo/player_state_combo_attack_heavy.gd" id="17_7ahtn"]
 [ext_resource type="Script" uid="uid://dwt4hssxu4uw" path="res://script/combat/combat_entity.gd" id="21_5tmop"]
 [ext_resource type="Script" uid="uid://hlfo6g4oy6tp" path="res://script/player/player_combo/player_state_combo_dodge.gd" id="21_7ahtn"]
+[ext_resource type="Script" uid="uid://ba7j3v6y2uicx" path="res://script/combat/combat_unit.gd" id="22_7ahtn"]
+[ext_resource type="Script" uid="uid://cds245xbqbutq" path="res://script/combat/race_data.gd" id="23_7lmhl"]
 
 [sub_resource type="Resource" id="Resource_dw050"]
 script = ExtResource("2_dw050")
@@ -2043,6 +2045,36 @@ _data = {
 &"run": SubResource("Animation_sweqy")
 }
 
+[sub_resource type="Resource" id="Resource_dx0e4"]
+script = ExtResource("23_7lmhl")
+exp_mult = 100
+exp_base = 2
+exp_needs = Array[int]([])
+max_level = 10
+free_points = 1
+strength_base = 100.0
+strength_scale = 10.0
+strength_points = 1
+belief_base = 100.0
+belief_scale = 10.0
+belief_points = 1
+health_base = 100.0
+health_scale = 0.3
+health_recover_period = 1.0
+health_recover_ratio = 0.01
+health_recover_value = 0.5
+stamina_max = 100.0
+stamina_wait = 3.0
+stamina_period = 0.1
+stamina_decline_value = -5.0
+magicka_max_base = 100.0
+magicka_max_scale = 0.2
+magicka_target_self = 30.0
+magicka_target_period = 0.2
+magicka_target_self_stack = 3
+magicka_target_env_stack = 2
+metadata/_custom_type_script = "uid://cds245xbqbutq"
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_1jxqw")
@@ -2178,6 +2210,11 @@ metadata/_custom_type_script = "uid://bgmpddrbrnpld"
 [node name="StateComboDodge" type="Node" parent="ConditionStateMachine/StateCombo/TransitionStateMachine"]
 script = ExtResource("21_7ahtn")
 metadata/_custom_type_script = "uid://hlfo6g4oy6tp"
+
+[node name="CombatUnit" type="Node" parent="."]
+script = ExtResource("22_7ahtn")
+race_data = SubResource("Resource_dx0e4")
+metadata/_custom_type_script = "uid://ba7j3v6y2uicx"
 
 [node name="CombatEntity" type="Node" parent="." node_paths=PackedStringArray("graphics")]
 script = ExtResource("21_5tmop")

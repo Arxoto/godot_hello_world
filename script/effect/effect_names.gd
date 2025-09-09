@@ -10,8 +10,3 @@ const MAGICKA_FLOW_ENV := "magicka_flow_env"
 const MAGICKA_FLOW_SELF := "magicka_flow_self"
 
 const PHYSICS_DAMAGE := "physics_damage"
-
-
-static func aaaaa():
-	var bbb := DynPropInstEffect.new_instant("from", "effectssssss", 1.0)
-	print("aaaaaaaaaaaaaaaaaaaaaaa ", bbb.get_effect_name())
