@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://be77smkc541lh"]
+
+[ext_resource type="Texture2D" uid="uid://bbgbws8n45fg4" path="res://ui/Base-01.png" id="1_35dqj"]
+[ext_resource type="Texture2D" uid="uid://curyyv80gd6qf" path="res://texture/char_blue_1.png" id="1_vexwc"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n5p5n"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+texture = ExtResource("1_35dqj")
+region_rect = Rect2(323, 203, 26, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nsy01"]
+atlas = ExtResource("1_vexwc")
+region = Rect2(21, 23, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_35dqj"]
+atlas = ExtResource("1_35dqj")
+region = Rect2(307, 21, 58, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5p5n"]
+atlas = ExtResource("1_35dqj")
+region = Rect2(308, 118, 56, 4)
+
+[node name="PropPanel" type="HBoxContainer"]
+
+[node name="AvatarBox" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_n5p5n")
+
+[node name="Avatar" type="TextureRect" parent="AvatarBox"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_nsy01")
+stretch_mode = 5
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.0
+value = 1.0
+texture_over = SubResource("AtlasTexture_35dqj")
+texture_progress = SubResource("AtlasTexture_n5p5n")
+texture_progress_offset = Vector2(1, 1)

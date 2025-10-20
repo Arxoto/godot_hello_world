@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://s0mol8xpob87"]
+[gd_scene load_steps=50 format=3 uid="uid://s0mol8xpob87"]
 
 [ext_resource type="Script" uid="uid://bgwonvxvahey8" path="res://script/player/player_character.gd" id="1_1jxqw"]
 [ext_resource type="Texture2D" uid="uid://curyyv80gd6qf" path="res://texture/char_blue_1.png" id="1_4flbx"]
@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://hlfo6g4oy6tp" path="res://script/player/player_combo/player_state_combo_dodge.gd" id="21_7ahtn"]
 [ext_resource type="Script" uid="uid://ba7j3v6y2uicx" path="res://script/combat/combat_unit.gd" id="22_7ahtn"]
 [ext_resource type="Script" uid="uid://cds245xbqbutq" path="res://script/combat/race_data.gd" id="23_7lmhl"]
+[ext_resource type="PackedScene" uid="uid://be77smkc541lh" path="res://ui/prop_panel.tscn" id="24_dx0e4"]
 
 [sub_resource type="Resource" id="Resource_dw050"]
 script = ExtResource("2_dw050")
@@ -48,8 +49,9 @@ climb_velocity = 80.0
 climb_gravity_scale = 100.0
 metadata/_custom_type_script = "uid://pqydyei2155r"
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_onrkg"]
-size = Vector2(10, 28)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7lmhl"]
+radius = 5.0
+height = 28.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5tmop"]
 size = Vector2(32, 13)
@@ -1692,7 +1694,6 @@ tracks/6/keys = {
 [sub_resource type="Animation" id="Animation_i3pqv"]
 resource_name = "idle"
 length = 0.6
-loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2082,8 +2083,7 @@ movement_data = SubResource("Resource_dw050")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -14)
-shape = SubResource("RectangleShape2D_onrkg")
-metadata/_edit_lock_ = true
+shape = SubResource("CapsuleShape2D_7lmhl")
 
 [node name="TheBody" type="Node2D" parent="."]
 
@@ -2220,3 +2220,11 @@ metadata/_custom_type_script = "uid://ba7j3v6y2uicx"
 script = ExtResource("21_5tmop")
 graphics = NodePath("../TheBody")
 metadata/_custom_type_script = "uid://dwt4hssxu4uw"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PropPanel" parent="CanvasLayer" instance=ExtResource("24_dx0e4")]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 96.0
+offset_bottom = 34.0

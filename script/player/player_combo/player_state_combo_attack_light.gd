@@ -26,11 +26,11 @@ func tick_frame(delta: float) -> TransitionStateBase:
 	if character.want_block_keep() and outer_state.can_block:
 		return state(StateComboBlock.STATE_NAME)
 	
-	want_attack_twice = want_attack_twice or character.want_attack_once()
+	want_attack_twice = want_attack_twice or character.want_attack_once() # 重新摁下一次，到时间窗后即可触发连击
 	if want_attack_twice and outer_state.can_attack_twice:
 		return state(StateComboAttackTwice.STATE_NAME)
 
-	want_heavy_attack = want_heavy_attack and character.want_attack_keep()
+	want_heavy_attack = want_heavy_attack and character.want_attack_keep() # 持续摁住直到到达时间窗，触发重击
 	if want_heavy_attack and outer_state.can_heavy_attack:
 		return state(StateComboAttackHeavy.STATE_NAME)
 	

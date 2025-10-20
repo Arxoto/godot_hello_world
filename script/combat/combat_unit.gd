@@ -9,6 +9,7 @@ var level_up := LevelUp.new()
 
 ## 血量 基础值受气力影响
 var health: ExProp
+#   energy
 ## 连贯 基础值不受影响 为连续进攻的加成
 var stamina: ExProp
 ## 气势 最大值受信念影响 为战斗优雅程度加成

@@ -58,6 +58,9 @@ func _unhandled_input(event: InputEvent):
 		jump_flag = true
 	elif event.is_action_released(INPUT_JUMP):
 		jump_flag = false
+	elif event.is_action(INPUT_MOVE_LEFT) or event.is_action(INPUT_MOVE_RIGHT):
+		var tmp_direction = Input.get_axis(INPUT_MOVE_LEFT, INPUT_MOVE_RIGHT)
+		print("%s/%s, %s: %s" % [Engine.get_process_frames(), Engine.get_physics_frames(), event.as_text(), tmp_direction])
 
 func _physics_process(delta: float) -> void:
 	# want
