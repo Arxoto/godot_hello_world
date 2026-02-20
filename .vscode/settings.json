@@ -5,5 +5,7 @@
 	"editor.defaultFormatter": "geequlim.godot-tools",
 	"editor.formatOnSave": true,
 	"editor.formatOnPaste": true,
-	"editor.fontFamily": "'Sarasa Mono SC', 'UbuntuMono Nerd Font Propo', Consolas, 'Courier New', monospace",
+	"editor.fontFamily": "WomPunctuationFixed, 'Sarasa Mono SC', WomPunctuationFixed1200, 'Maple Mono NF CN', 'UbuntuMono Nerd Font Propo'",
+	"godotTools.editorPath.godot4": "C:\\Users\\Jesus\\scoop\\apps\\godot\\current\\godot.exe",
+	"godotTools.lsp.headless": true,
 }

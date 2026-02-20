@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cgycebvnfefx2"]
+[gd_scene format=3 uid="uid://cgycebvnfefx2"]
 
 [ext_resource type="Texture2D" uid="uid://cc3cl6v6j0ub1" path="res://texture/Mob/Boar/Idle/Idle-Sheet.png" id="1_4ov56"]
 [ext_resource type="Script" uid="uid://cybxqfh2hq66y" path="res://boar.gd" id="1_5v2dv"]
@@ -253,142 +253,114 @@ size = Vector2(11, 11)
 
 [sub_resource type="Resource" id="Resource_1bx3e"]
 script = ExtResource("13_kpc21")
-exp_mult = 100
-exp_base = 2
-exp_needs = Array[int]([])
-max_level = 10
-free_points = 1
-strength_base = 100.0
-strength_scale = 10.0
-strength_points = 1
-belief_base = 100.0
-belief_scale = 10.0
-belief_points = 1
-health_base = 100.0
-health_scale = 0.3
-health_recover_period = 1.0
-health_recover_ratio = 0.01
-health_recover_value = 0.5
-stamina_max = 100.0
-stamina_wait = 3.0
-stamina_period = 0.1
-stamina_decline_value = -5.0
-magicka_max_base = 100.0
-magicka_max_scale = 0.2
-magicka_target_self = 30.0
-magicka_target_period = 0.2
-magicka_target_self_stack = 3
-magicka_target_env_stack = 2
 metadata/_custom_type_script = "uid://cds245xbqbutq"
 
-[node name="Boar" type="CharacterBody2D"]
+[node name="Boar" type="CharacterBody2D" unique_id=1459949856]
 collision_layer = 4
 script = ExtResource("1_5v2dv")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=735556080]
 position = Vector2(-1.5, -12.5)
 shape = SubResource("RectangleShape2D_d1qa8")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_olp25")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1923591936]
+libraries/ = SubResource("AnimationLibrary_olp25")
 
-[node name="Graphics" type="Node2D" parent="."]
+[node name="Graphics" type="Node2D" parent="." unique_id=1707881113]
 
-[node name="Sprite2D" type="Sprite2D" parent="Graphics"]
+[node name="Sprite2D" type="Sprite2D" parent="Graphics" unique_id=1631703033]
 position = Vector2(0, -16)
 texture = ExtResource("1_4ov56")
 hframes = 4
 region_enabled = true
 region_rect = Rect2(0, 0, 192, 32)
 
-[node name="LookForEnemy" type="RayCast2D" parent="Graphics"]
+[node name="LookForEnemy" type="RayCast2D" parent="Graphics" unique_id=65321692]
 position = Vector2(-17, -13)
 target_position = Vector2(-146, 0)
 collision_mask = 3
 
-[node name="LookFront" type="RayCast2D" parent="Graphics"]
+[node name="LookFront" type="RayCast2D" parent="Graphics" unique_id=831446208]
 position = Vector2(-7, -13)
 target_position = Vector2(-23, 0)
 
-[node name="LookDown" type="RayCast2D" parent="Graphics"]
+[node name="LookDown" type="RayCast2D" parent="Graphics" unique_id=1722725759]
 position = Vector2(-31, -5)
 target_position = Vector2(0, 9)
 
-[node name="Hitbox" type="Area2D" parent="Graphics"]
+[node name="Hitbox" type="Area2D" parent="Graphics" unique_id=473858216]
 script = ExtResource("5_2s4f2")
 metadata/_custom_type_script = "uid://q4rup5eu1rgw"
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
 
-[node name="HitTeeth" type="CollisionShape2D" parent="Graphics/Hitbox"]
+[node name="HitTeeth" type="CollisionShape2D" parent="Graphics/Hitbox" unique_id=386438868]
 position = Vector2(-13, -9)
 shape = SubResource("RectangleShape2D_41i02")
 
-[node name="HitBody" type="CollisionShape2D" parent="Graphics/Hitbox"]
+[node name="HitBody" type="CollisionShape2D" parent="Graphics/Hitbox" unique_id=1400272104]
 position = Vector2(-1.5, -12)
 shape = SubResource("RectangleShape2D_xhywa")
 
-[node name="Hurtbox" type="Area2D" parent="Graphics"]
+[node name="Hurtbox" type="Area2D" parent="Graphics" unique_id=457749117]
 script = ExtResource("6_d8vwy")
 metadata/_custom_type_script = "uid://ybcsqcodncq"
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Graphics/Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Graphics/Hurtbox" unique_id=158131582]
 position = Vector2(-3, -12.5)
 shape = SubResource("RectangleShape2D_kpc21")
 
-[node name="HurtboxPart" type="Area2D" parent="Graphics"]
+[node name="HurtboxPart" type="Area2D" parent="Graphics" unique_id=1153089034]
 script = ExtResource("6_d8vwy")
 metadata/_custom_type_script = "uid://ybcsqcodncq"
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Graphics/HurtboxPart"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Graphics/HurtboxPart" unique_id=1839137755]
 position = Vector2(-7.5, -13.5)
 shape = SubResource("RectangleShape2D_d8vwy")
 
-[node name="IdleTimer" type="Timer" parent="."]
+[node name="IdleTimer" type="Timer" parent="." unique_id=632102619]
 wait_time = 2.4
 one_shot = true
 
-[node name="WalkTimer" type="Timer" parent="."]
+[node name="WalkTimer" type="Timer" parent="." unique_id=1738930652]
 wait_time = 5.4
 one_shot = true
 
-[node name="AngryTimer" type="Timer" parent="."]
+[node name="AngryTimer" type="Timer" parent="." unique_id=555851318]
 wait_time = 3.0
 one_shot = true
 
-[node name="TransitionStateMachine" type="Node" parent="." node_paths=PackedStringArray("default_state")]
+[node name="TransitionStateMachine" type="Node" parent="." unique_id=2016301737 node_paths=PackedStringArray("default_state")]
 script = ExtResource("5_1lvwi")
 default_state = NodePath("StateLandAir")
 metadata/_custom_type_script = "uid://dcopww4hqbtc5"
 
-[node name="StateLandAir" type="Node" parent="TransitionStateMachine"]
+[node name="StateLandAir" type="Node" parent="TransitionStateMachine" unique_id=1260103303]
 script = ExtResource("6_1lvwi")
 metadata/_custom_type_script = "uid://cd86jxxvhyhvx"
 
-[node name="StateLandRun" type="Node" parent="TransitionStateMachine"]
+[node name="StateLandRun" type="Node" parent="TransitionStateMachine" unique_id=730728817]
 script = ExtResource("7_2s4f2")
 metadata/_custom_type_script = "uid://xibjk0v8latl"
 
-[node name="StateLandWalk" type="Node" parent="TransitionStateMachine"]
+[node name="StateLandWalk" type="Node" parent="TransitionStateMachine" unique_id=384144944]
 script = ExtResource("8_d8vwy")
 metadata/_custom_type_script = "uid://byn4xqhyoi1p1"
 
-[node name="StateLandIdle" type="Node" parent="TransitionStateMachine"]
+[node name="StateLandIdle" type="Node" parent="TransitionStateMachine" unique_id=532712493]
 script = ExtResource("9_olp25")
 metadata/_custom_type_script = "uid://bv1sh37x35lrb"
 
-[node name="CombatUnit" type="Node" parent="."]
+[node name="CombatUnit" type="Node" parent="." unique_id=880234954]
 script = ExtResource("12_41i02")
 race_data = SubResource("Resource_1bx3e")
 metadata/_custom_type_script = "uid://ba7j3v6y2uicx"
 
-[node name="CombatEntity" type="Node" parent="." node_paths=PackedStringArray("graphics")]
+[node name="CombatEntity" type="Node" parent="." unique_id=593834954 node_paths=PackedStringArray("graphics")]
 script = ExtResource("13_xhywa")
 graphics = NodePath("../Graphics")
 metadata/_custom_type_script = "uid://dwt4hssxu4uw"
